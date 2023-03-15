@@ -11,7 +11,7 @@ public:
     std::vector<Mesh> meshes;
     Camera camera;
     Matrix4x4 matrix;
-    DirectionalLight *light;
+    Light *light;
 
     void Init();
     void Quit();

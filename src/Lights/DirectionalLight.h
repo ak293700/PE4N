@@ -3,11 +3,13 @@
 #include <SDL.h>
 #include "../Structs/Vec3.h"
 #include "../Structs/Triangle.h"
+#include "Light.h"
 
-class DirectionalLight
+class DirectionalLight : public Light
 {
 public:
-    DirectionalLight(Vec3 dir);
     Vec3 dir{}; // the length must be 1
-    SDL_Color GetColor(const Triangle& tgl) const;
+
+    DirectionalLight(Vec3 dir, SDL_Color color);
+    SDL_Color GetColor(const Triangle& tgl) const override;
 };

@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Vec3.h"
+struct Vec3;
 
 struct Matrix4x4
 {
@@ -16,6 +19,15 @@ struct Matrix4x4
     {
         m[C * y + x] = value;
     }
-};
 
-void MultiplyVectorMatrix(const Vec3& v, const Matrix4x4& m, Vec3& res);
+    [[nodiscard]] Matrix4x4 Transpose() const;
+
+    [[nodiscard]] Matrix4x4 operator*(const Matrix4x4 &other) const;
+
+    [[nodiscard]] Vec3 operator*(const Vec3 &other) const;
+
+    inline static Matrix4x4 Zero()
+    {
+        return {};
+    };
+};

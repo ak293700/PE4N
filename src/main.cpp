@@ -1,6 +1,5 @@
 #include "MainManager/MainManager.h"
 #include "Drawers/Colors.h"
-#include "Drawers/DrawerTool.h"
 
 int main()
 {

@@ -1,9 +1,8 @@
 #include "DirectionalLight.h"
-#include <iostream>
 
-DirectionalLight::DirectionalLight(Vec3 dir) : dir(dir)
+DirectionalLight::DirectionalLight(Vec3 dir, SDL_Color color)
+        : Light(color), dir(dir)
 {
-    dir.Normalize();
 }
 
 SDL_Color DirectionalLight::GetColor(const Triangle &tgl) const
@@ -16,6 +15,9 @@ SDL_Color DirectionalLight::GetColor(const Triangle &tgl) const
     if (nL != 0.0f)
         same = dP / nL;
 
-    Uint8 grayscale = (Uint8)(255.0f * same * 0.5f + 255.0f);
-    return {grayscale, grayscale, grayscale, 255};
+    float grayscale = 255.0f * same * 0.5f + 255.0f;
+    return {(Uint8) (grayscale * rgbStrength.x),
+            (Uint8) (grayscale * rgbStrength.y),
+            (Uint8) (grayscale * rgbStrength.z),
+            255};
 }

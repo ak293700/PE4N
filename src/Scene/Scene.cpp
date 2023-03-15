@@ -19,7 +19,7 @@ void Scene::Init()
 
     meshes.reserve(100); // we allocate the
 
-    light = new DirectionalLight((Vec3){0.0f, 0.0f, -1.0f});
+    light = new DirectionalLight( {0.0f, 0.0f, 1.0f}, {225, 225, 255, 255});
 }
 
 void Scene::Quit()
@@ -50,23 +50,21 @@ void Scene::Render(float delta)
     matRotX.set(2, 2, cosf(fTheta * 0.5f));
     matRotX.set(3, 3, 1);
 
+    Matrix4x4 matRotXZ = matRotX * matRotZ;
+
     for (const auto &mesh: meshes)
     {
         for (const auto &tgl: mesh.triangles)
         {
-            Triangle tglTransformed, triRotatedZ, triRotatedZX;
+            Triangle tglTransformed;
 
             // Rotate in Z-Axis
-            MultiplyVectorMatrix(tgl.a, matRotZ, triRotatedZ.a);
-            MultiplyVectorMatrix(tgl.b, matRotZ, triRotatedZ.b);
-            MultiplyVectorMatrix(tgl.c, matRotZ, triRotatedZ.c);
-
             // Rotate in X-Axis
-            MultiplyVectorMatrix(triRotatedZ.a, matRotX, triRotatedZX.a);
-            MultiplyVectorMatrix(triRotatedZ.b, matRotX, triRotatedZX.b);
-            MultiplyVectorMatrix(triRotatedZ.c, matRotX, triRotatedZX.c);
 
-            tglTransformed = triRotatedZX;
+            tglTransformed.a = tgl.a * matRotXZ;
+            tglTransformed.b = tgl.b * matRotXZ;
+            tglTransformed.c = tgl.c * matRotXZ;
+
             tglTransformed.a.z += 3;
             tglTransformed.b.z += 3;
             tglTransformed.c.z += 3;
@@ -78,9 +76,9 @@ void Scene::Render(float delta)
 
             // Project the triangle and render it
             Triangle pjt; // projected triangle
-            MultiplyVectorMatrix(tglTransformed.a, matrix, pjt.a);
-            MultiplyVectorMatrix(tglTransformed.b, matrix, pjt.b);
-            MultiplyVectorMatrix(tglTransformed.c, matrix, pjt.c);
+            pjt.a = tglTransformed.a * matrix;
+            pjt.b = tglTransformed.b * matrix;
+            pjt.c = tglTransformed.c * matrix;
 
             pjt.a.x += 1.0f;
             pjt.a.y += 1.0f;
