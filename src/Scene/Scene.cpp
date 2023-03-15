@@ -27,7 +27,7 @@ void Scene::Quit()
 {
 }
 
-void Scene::Render(float delta)
+void Scene::Render(float delta) const
 {
     static float fTheta = 0.0f;
     fTheta += delta;
@@ -77,7 +77,7 @@ void Scene::Render(float delta)
 
             Vec3 normal = tglTransformed.norm();
 
-            if (normal.DotProduct(camera.position.Diff(tglTransformed.a)) >= 0.0f)
+            if (normal.DotProduct(camera.position.Diff(tglTransformed.a)) > 0.0f)
                 continue;
 
             // Project the triangle and render it
