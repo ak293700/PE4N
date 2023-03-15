@@ -1,5 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -G Ninja -S /Users/alexandreakdeniz/CLionProjects/PE4N -B /Users/alexandreakdeniz/CLionProjects/PE4N/cmake-build-debug
--- Found SDL2: /opt/homebrew/lib/libSDL2.dylib
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/alexandreakdeniz/CLionProjects/PE4N/cmake-build-debug
