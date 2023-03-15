@@ -33,7 +33,7 @@ int main()
                     {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}}
             }
     };
-    MainManager::scene.meshes.push_back(cube);
+//    MainManager::scene.meshes.push_back(cube);
 
     Mesh triangle = {
             {
@@ -45,7 +45,7 @@ int main()
             }
 
     };
-    MainManager::scene.meshes.push_back(triangle);
+//    MainManager::scene.meshes.push_back(triangle);
 
     MainManager::Main();
 

@@ -18,6 +18,7 @@ void Scene::Init()
     matrix.set(3, 3, 0.0f);
 
     meshes.reserve(100); // we allocate the
+    meshes.push_back(Mesh::Load("../assets/teapot.obj"));
 
     light = new DirectionalLight( {0.0f, 0.0f, 1.0f}, {225, 225, 255, 255});
 }
@@ -31,10 +32,10 @@ void Scene::Render(float delta)
     static float fTheta = 0.0f;
     fTheta += delta;
 
-    light->SetColor({(Uint8) (255.0f * (sinf(fTheta) + 1.0f) * 0.5f),
-                     (Uint8) (255.0f * (cosf(fTheta) + 1.0f) * 0.5f),
-                     (Uint8) (255.0f * (sinf(fTheta * 0.5f) + 1.0f) * 0.5f),
-                     255});
+//    light->SetColor({(Uint8) (255.0f * (sinf(fTheta) + 1.0f) * 0.5f),
+//                     (Uint8) (255.0f * (cosf(fTheta) + 1.0f) * 0.5f),
+//                     (Uint8) (255.0f * (sinf(fTheta * 0.5f) + 1.0f) * 0.5f),
+//                     255});
 
     Matrix4x4 matRotZ = {0};
     Matrix4x4 matRotX = {0};
@@ -70,9 +71,9 @@ void Scene::Render(float delta)
             tglTransformed.b = tgl.b * matRotXZ;
             tglTransformed.c = tgl.c * matRotXZ;
 
-            tglTransformed.a.z += 3;
-            tglTransformed.b.z += 3;
-            tglTransformed.c.z += 3;
+            tglTransformed.a.z += 6.0f;
+            tglTransformed.b.z += 6.0f;
+            tglTransformed.c.z += 6.0f;
 
             Vec3 normal = tglTransformed.norm();
 
