@@ -31,6 +31,11 @@ void Scene::Render(float delta)
     static float fTheta = 0.0f;
     fTheta += delta;
 
+    light->SetColor({(Uint8) (255.0f * (sinf(fTheta) + 1.0f) * 0.5f),
+                     (Uint8) (255.0f * (cosf(fTheta) + 1.0f) * 0.5f),
+                     (Uint8) (255.0f * (sinf(fTheta * 0.5f) + 1.0f) * 0.5f),
+                     255});
+
     Matrix4x4 matRotZ = {0};
     Matrix4x4 matRotX = {0};
 
