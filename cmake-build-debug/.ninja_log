@@ -1,0 +1,19 @@
+# ninja log v5
+4	505	1678832120528458300	CMakeFiles/PE4N.dir/src/Lights/DirectionalLight.cpp.o	ffd450aa15fd9c67
+759	865	1678832761642138140	PE4N	d1eabb026db2c916
+4	455	1678557375542260298	CMakeFiles/PE4N.dir/src/MainManager.cpp.o	27e8f2f4dcd91cec
+5	73	1678739350802572359	CMakeFiles/PE4N.dir/src/Tool/Utils.cpp.o	65e359b8de861d7a
+5	748	1678832761522198325	CMakeFiles/PE4N.dir/src/main.cpp.o	54753cd63173cdfb
+14	565	1678554949889750528	CMakeFiles/PE4N.dir/main.cpp.o	8b8cb3b5b6ffd498
+208	974	1678829028492581547	CMakeFiles/PE4N.dir/src/Structs/Vec3.cpp.o	fc9ed4c9a5934d95
+4	691	1678832761453365821	CMakeFiles/PE4N.dir/src/MainManager/MainManager.cpp.o	3716fbcfeca4eab0
+5	388	1678739351116714102	CMakeFiles/PE4N.dir/src/Structs/Vec2.cpp.o	60f2f4811f35cb9
+4	46	1678831607887452137	CMakeFiles/PE4N.dir/src/Structs/Triangle.cpp.o	f7dc2d32a53e16d
+4	708	1678832761482041313	CMakeFiles/PE4N.dir/src/Drawers/DrawerTool.cpp.o	8c6fdc53b3987a93
+3	289	1678558446281592971	CMakeFiles/PE4N.dir/src/FramerateDrawer/FramerateDrawer.cpp.o	a2b328c80b33a914
+4	657	1678832761431107409	CMakeFiles/PE4N.dir/src/Drawers/FramerateDrawer/FramerateDrawer.cpp.o	34b8757cb9536517
+4	388	1678558116791220698	CMakeFiles/PE4N.dir/src/FramerateDrawer.cpp.o	7257ef28052a62d4
+5	759	1678832761532832057	CMakeFiles/PE4N.dir/src/Scene/Scene.cpp.o	8c14de7f2f7bd09d
+7	138	1678829027657621231	CMakeFiles/PE4N.dir/src/Structs/Matrix4x4.cpp.o	eb7f83c2c9c12830
+4	568	1678832800390748276	CMakeFiles/PE4N.dir/src/Scene/Scene.cpp.o	8c14de7f2f7bd09d
+568	627	1678832800452148379	PE4N	d1eabb026db2c916
