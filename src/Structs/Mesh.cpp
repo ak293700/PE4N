@@ -22,7 +22,7 @@ Mesh Mesh::Load(const std::string& path)
         if (!std::equal(type.begin(), type.end(), "v"))
             continue;
 
-        Vec3 v;
+        Vec3 v = Vec3();
         ss >> v.x >> v.y >> v.z;
         vertices.push_back(v);
     }
@@ -45,13 +45,6 @@ Mesh Mesh::Load(const std::string& path)
         result.triangles.push_back({vertices[v1 - 1], vertices[v2 - 1], vertices[v3 - 1]});
     }
 
-    std::cout << result.triangles.size() << std::endl;
-
-
-//    for (int i = 0; i < vertices.size(); i += 3)
-//    {
-//        result.triangles.push_back(Triangle(vertices[i], vertices[i + 1], vertices[i + 2]));
-//    }
 
     file.close();
     return result;

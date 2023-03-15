@@ -11,5 +11,5 @@ public:
     Vec3 dir{}; // the length must be 1
 
     DirectionalLight(Vec3 dir, SDL_Color color);
-    SDL_Color GetColor(const Triangle& tgl) const override;
+    [[nodiscard]] SDL_Color GetColor(const Triangle& tgl) const override;
 };

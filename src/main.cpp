@@ -3,7 +3,7 @@
 
 int main()
 {
-    MainManager::Init(600, 600);
+    MainManager::Init(800, 800);
 
     // Define the 12 triangles of the cube
     Mesh cube = {
