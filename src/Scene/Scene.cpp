@@ -3,6 +3,7 @@
 #include "../Structs/Vec2.h"
 #include "../Drawers/Colors.h"
 #include "../Drawers/DrawerTool.h"
+#include <algorithm>
 
 
 void Scene::Init()
@@ -20,7 +21,7 @@ void Scene::Init()
     meshes.reserve(100); // we allocate the
     meshes.push_back(Mesh::Load("../assets/teapot.obj"));
 
-    light = new DirectionalLight( {0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
+    light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
 
 void Scene::Quit()
@@ -31,6 +32,12 @@ void Scene::Render(float delta) const
 {
     static float fTheta = 0.0f;
     fTheta += delta;
+
+    // set color to follow fTheta
+//    light->SetColor({(Uint8) (255.0f * (sinf(fTheta * 0.5f) + 1.0f) * 0.5f),
+//                     (Uint8) (255.0f * (sinf(fTheta * 0.3f) + 1.0f) * 0.5f),
+//                     (Uint8) (255.0f * (sinf(fTheta * 0.8f) + 1.0f) * 0.5f),
+//                     255});
 
     Matrix4x4 matRotZ = {0};
     Matrix4x4 matRotX = {0};
@@ -52,6 +59,8 @@ void Scene::Render(float delta) const
     matRotX.set(3, 3, 1);
 
     Matrix4x4 matRotXZ = matRotX * matRotZ;
+
+    std::vector<Triangle> trianglesToRaster;
 
     for (const auto &mesh: meshes)
     {
@@ -75,37 +84,51 @@ void Scene::Render(float delta) const
             if (normal.DotProduct(camera.position.Diff(tglTransformed.a)) > 0.0f)
                 continue;
 
-            // Project the triangle and render it
-            Triangle pjt; // projected triangle
-            pjt.a = tglTransformed.a * matrix;
-            pjt.b = tglTransformed.b * matrix;
-            pjt.c = tglTransformed.c * matrix;
-
-            pjt.a.x += 1.0f;
-            pjt.a.y += 1.0f;
-
-            pjt.b.x += 1.0f;
-            pjt.b.y += 1.0f;
-
-            pjt.c.x += 1.0f;
-            pjt.c.y += 1.0f;
-
-            float fWidth = (float) MainManager::width;
-            float fHeight = (float) MainManager::height;
-
-            pjt.a.x *= 0.5f * fWidth;
-            pjt.a.y *= 0.5f * fHeight;
-
-            pjt.b.x *= 0.5f * fWidth;
-            pjt.b.y *= 0.5f * fHeight;
-
-            pjt.c.x *= 0.5f * fWidth;
-            pjt.c.y *= 0.5f * fHeight;
-
-            Draw2dTriangle((Vec2) {pjt.a.x, pjt.a.y},
-                           (Vec2) {pjt.b.x, pjt.b.y},
-                           (Vec2) {pjt.c.x, pjt.c.y},
-                           light->GetColor(tglTransformed));
+            // Add in the to render list
+            trianglesToRaster.push_back(tglTransformed);
         }
+    }
+
+    // Sort triangles from back to front
+    std::sort(trianglesToRaster.begin(), trianglesToRaster.end(), [](const Triangle &a, const Triangle &b)
+    {
+        float zA = (a.a.z + a.b.z + a.c.z) / 3.0f;
+        float zB = (b.a.z + b.b.z + b.c.z) / 3.0f;
+        return zA > zB;
+    });
+
+    for (const auto &tgl: trianglesToRaster)
+    {
+        // Project the triangle and render it
+        Triangle pjt; // projected triangle
+        pjt.a = tgl.a * matrix;
+        pjt.b = tgl.b * matrix;
+        pjt.c = tgl.c * matrix;
+
+        pjt.a.x += 1.0f;
+        pjt.a.y += 1.0f;
+
+        pjt.b.x += 1.0f;
+        pjt.b.y += 1.0f;
+
+        pjt.c.x += 1.0f;
+        pjt.c.y += 1.0f;
+
+        float fWidth = (float) MainManager::width;
+        float fHeight = (float) MainManager::height;
+
+        pjt.a.x *= 0.5f * fWidth;
+        pjt.a.y *= 0.5f * fHeight;
+
+        pjt.b.x *= 0.5f * fWidth;
+        pjt.b.y *= 0.5f * fHeight;
+
+        pjt.c.x *= 0.5f * fWidth;
+        pjt.c.y *= 0.5f * fHeight;
+
+        Draw2dTriangle((Vec2) {pjt.a.x, pjt.a.y},
+                       (Vec2) {pjt.b.x, pjt.b.y},
+                       (Vec2) {pjt.c.x, pjt.c.y},
+                       light->GetColor(tgl));
     }
 }
