@@ -16,5 +16,4 @@ public:
     void Init();
     void Quit();
     void Render(float delta) const;
-
 };

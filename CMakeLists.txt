@@ -9,7 +9,6 @@ set(SDL2_INCLUDE_DIRS /opt/homebrew/include/SDL2)
 set(SDL2_LIBRARIES /opt/homebrew/lib/libSDL2.dylib)
 set(SDL2_TTF_LIBRARIES /opt/homebrew/lib/libSDL2_ttf.dylib)
 
-
 # Find every source file
 file(GLOB_RECURSE SRC_FILES "src/*.cpp" "src/*.h")
 add_executable(PE4N ${SRC_FILES})
@@ -17,4 +16,3 @@ add_executable(PE4N ${SRC_FILES})
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES})
-

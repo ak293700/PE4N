@@ -16,7 +16,7 @@ public:
         triangles = std::vector<Triangle>();
     };
 
-    static Mesh Load(const std::string& path);
+    static Mesh Load(const std::string& path, float scale = 1.0f, Vec3 offset = {0, 0, 0});
 };
 
 

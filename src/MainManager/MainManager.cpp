@@ -69,16 +69,26 @@ void MainManager::Main()
             {
                 case SDL_QUIT:
                     return;
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.sym == SDLK_w)
+                        std::cout << "Move camera forward" << std::endl;
+                    else if (event.key.keysym.sym == SDLK_a)
+                        std::cout << "Move camera left" << std::endl;
+                    else if (event.key.keysym.sym == SDLK_s)
+                        std::cout << "Move camera backward" << std::endl;
+                    else if (event.key.keysym.sym == SDLK_d)
+                        std::cout << "Move camera right" << std::endl;
+                    else if (event.key.keysym.sym == SDLK_ESCAPE)
+                        return;
+                    break;
             }
         }
-
 
         current_time = SDL_GetTicks();
         Run(((float) (current_time - last_frame_time)) / 1000.0f);
         last_frame_time = current_time;
     }
 }
-
 
 void MainManager::Run(float delta)
 {

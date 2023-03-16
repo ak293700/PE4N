@@ -3,7 +3,8 @@
 #include <fstream>
 #include <sstream>
 
-Mesh Mesh::Load(const std::string& path)
+// Does not handle everything
+Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
 {
     Mesh result;
 
@@ -24,14 +25,14 @@ Mesh Mesh::Load(const std::string& path)
 
         Vec3 v = Vec3();
         ss >> v.x >> v.y >> v.z;
-        vertices.push_back(v);
+        vertices.push_back(v * scale + offset);
     }
 
     // reset stream to beginning
     file.clear();
     file.seekg(0, std::ios::beg);
 
-
+    int tmp = 0;
     while (std::getline(file, line))
     {
         std::stringstream ss = std::stringstream(line);
@@ -40,14 +41,24 @@ Mesh Mesh::Load(const std::string& path)
         if (!std::equal(type.begin(), type.end(), "f"))
             continue;
 
-        int v1, v2, v3;
-        ss >> v1 >> v2 >> v3;
-        result.triangles.push_back({vertices[v1 - 1], vertices[v2 - 1], vertices[v3 - 1]});
+        if (++tmp == 5427)
+            tmp = tmp;
+
+        std::vector<Vec3> polygon_vertices;
+        std::string vertex_string;
+        while (ss >> vertex_string)
+        {
+            std::stringstream ss1 = std::stringstream(vertex_string);
+            int vertex_index;
+            ss1 >> vertex_index;
+            polygon_vertices.push_back(vertices[vertex_index - 1]);
+        }
+
+        for (size_t i = 2; i < polygon_vertices.size(); i++)
+            result.triangles.push_back({polygon_vertices[0], polygon_vertices[i-1], polygon_vertices[i]});
     }
 
 
     file.close();
     return result;
-
-    // TODO
 }
