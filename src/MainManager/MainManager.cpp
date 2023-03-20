@@ -69,7 +69,7 @@ void MainManager::Main()
 
         while (SDL_PollEvent(&event))
         {
-            const float speed = 20.0f;
+            const float speed = 40.0f;
             switch (event.type)
             {
                 case SDL_QUIT:
@@ -84,7 +84,9 @@ void MainManager::Main()
                     else if (event.key.keysym.sym == SDLK_s)
                         scene.camera.position -= scene.camera.lookDir * speed * delta;
                     else if (event.key.keysym.sym == SDLK_a)
+                    {
                         scene.camera.position.x -= speed * delta;
+                    }
                     else if (event.key.keysym.sym == SDLK_d)
                         scene.camera.position.x += speed * delta;
                     else if (event.key.keysym.sym == SDLK_UP)
@@ -102,8 +104,8 @@ void MainManager::Main()
             }
         }
 
-        Run(delta);
         last_frame_time = current_time;
+        Run(delta);
     }
 }
 

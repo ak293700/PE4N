@@ -100,17 +100,6 @@ void Scene::Render(float delta) const
                     matCameraInv * tglTransformed.c,
             };
 
-            matCameraInv.Print();
-            tglTransformed.a.Print();
-            tglViewed.a.Print();
-            (tglViewed.a - tglTransformed.a).Print();
-            std::cout << std::endl;
-
-
-//            tglViewed.a =  tglViewed.a / tglViewed.a.w;
-//            tglViewed.b =  tglViewed.b / tglViewed.b.w;
-//            tglViewed.c =  tglViewed.c / tglViewed.c.w;
-
             // Add in the to render list
             trianglesToRaster.push_back(tglViewed);
         }

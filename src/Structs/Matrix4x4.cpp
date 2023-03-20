@@ -54,12 +54,6 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4 &other) const
 
 Vec3 Matrix4x4::operator*(const Vec3 &other) const
 {
-//    return {
-//            other.x * get(0, 0) + other.y * get(1, 0) + other.z * get(2, 0) + get(3, 0),
-//            other.x * get(0, 1) + other.y * get(1, 1) + other.z * get(2, 1) + get(3, 1),
-//            other.x * get(0, 2) + other.y * get(1, 2) + other.z * get(2, 2) + get(3, 2),
-//    };
-
     return {
             other.x * get(0, 0) + other.y * get(0, 1) + other.z * get(0, 2) + get(0, 3),
             other.x * get(1, 0) + other.y * get(1, 1) + other.z * get(1, 2) + get(1, 3),
