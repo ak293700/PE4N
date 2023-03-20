@@ -62,30 +62,47 @@ void MainManager::Main()
     Uint64 current_time;
     while (true)
     {
+        current_time = SDL_GetTicks();
+        float delta = ((float) (current_time - last_frame_time)) / 1000.0f;
+
         SDL_Event event;
+
         while (SDL_PollEvent(&event))
         {
+            const float speed = 20.0f;
             switch (event.type)
             {
                 case SDL_QUIT:
                     return;
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.sym == SDLK_w)
-                        std::cout << "Move camera forward" << std::endl;
-                    else if (event.key.keysym.sym == SDLK_a)
-                        std::cout << "Move camera left" << std::endl;
+                    if (event.key.keysym.sym == SDLK_e)
+                        scene.camera.position.y += speed * delta;
+                    else if (event.key.keysym.sym == SDLK_r)
+                        scene.camera.position.y -= speed * delta;
+                    else if (event.key.keysym.sym == SDLK_w)
+                        scene.camera.position += scene.camera.lookDir * speed * delta;
                     else if (event.key.keysym.sym == SDLK_s)
-                        std::cout << "Move camera backward" << std::endl;
+                        scene.camera.position -= scene.camera.lookDir * speed * delta;
+                    else if (event.key.keysym.sym == SDLK_a)
+                        scene.camera.position.x -= speed * delta;
                     else if (event.key.keysym.sym == SDLK_d)
-                        std::cout << "Move camera right" << std::endl;
+                        scene.camera.position.x += speed * delta;
+                    else if (event.key.keysym.sym == SDLK_UP)
+                        scene.camera.pitch += speed * delta;
+                    else if (event.key.keysym.sym == SDLK_DOWN)
+                        scene.camera.pitch -= speed * delta;
+                    else if (event.key.keysym.sym == SDLK_LEFT)
+                        scene.camera.yaw += speed * delta;
+                    else if (event.key.keysym.sym == SDLK_RIGHT)
+                        scene.camera.yaw -= speed * delta;
+
                     else if (event.key.keysym.sym == SDLK_ESCAPE)
                         return;
                     break;
             }
         }
 
-        current_time = SDL_GetTicks();
-        Run(((float) (current_time - last_frame_time)) / 1000.0f);
+        Run(delta);
         last_frame_time = current_time;
     }
 }
@@ -93,6 +110,10 @@ void MainManager::Main()
 void MainManager::Run(float delta)
 {
     Clear();
+    Matrix4x4 matCameraRot = Matrix4x4::RotationY(scene.camera.yaw) * Matrix4x4::RotationX(scene.camera.pitch);
+    Vec3 lookDir = (matCameraRot * (Vec3) {0.0f, 0.0f, 1.0f});
+    scene.camera.lookDir = lookDir;
+
     scene.Render(delta);
     displayFPS();
 

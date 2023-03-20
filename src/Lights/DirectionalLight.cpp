@@ -32,5 +32,4 @@ SDL_Color DirectionalLight::GetColor(const Triangle &tgl) const
 void DirectionalLight::SetDir(const Vec3 &_dir)
 {
     dir = _dir.Normalize();
-//    dir.Print();
 }

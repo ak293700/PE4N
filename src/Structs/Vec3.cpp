@@ -104,10 +104,11 @@ Vec3 Vec3::operator/(float other) const
 
 Vec3 Vec3::operator*(const Matrix4x4 &m) const
 {
-    Vec3 res;
-    res.x = x * m.get(0, 0) + y * m.get(1, 0) + z * m.get(2, 0) + m.get(3, 0);
-    res.y = x * m.get(0, 1) + y * m.get(1, 1) + z * m.get(2, 1) + m.get(3, 1);
-    res.z = x * m.get(0, 2) + y * m.get(1, 2) + z * m.get(2, 2) + m.get(3, 2);
+    Vec3 res = {
+            x * m.get(0, 0) + y * m.get(1, 0) + z * m.get(2, 0) + m.get(3, 0),
+            x * m.get(0, 1) + y * m.get(1, 1) + z * m.get(2, 1) + m.get(3, 1),
+            x * m.get(0, 2) + y * m.get(1, 2) + z * m.get(2, 2) + m.get(3, 2)
+    };
 
     float w = x * m.get(0, 3)
               + y * m.get(1, 3)
@@ -122,4 +123,20 @@ Vec3 Vec3::operator*(const Matrix4x4 &m) const
     }
 
     return res;
+}
+
+Vec3 Vec3::operator+=(const Vec3 &other)
+{
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    return *this;
+}
+
+Vec3 Vec3::operator-=(const Vec3 &other)
+{
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return *this;
 }

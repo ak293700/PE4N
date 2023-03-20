@@ -2,12 +2,15 @@
 
 struct Camera
 {
+public:
     float fNear; // units of the game
     float fFar; // units of the game
     float fov; // in degrees
     float fovRad; // a calculation we cache
     Vec3 position;
-    Vec3 lDir; // the direction the camera is looking to
+    Vec3 lookDir; // the direction the camera is looking to
+    float yaw = 0.0f;
+    float pitch = 0.0f;
 
     void computeFovRad()
     {

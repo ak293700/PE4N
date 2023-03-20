@@ -8,7 +8,7 @@
 
 void Scene::Init()
 {
-    camera = {0.1f,1000.0f,90.0f,0.0f,{0},{0}};
+    camera = {0.1f, 1000.0f, 90.0f, 0.0f, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
     camera.computeFovRad();
 
     matrix.set(0, 0, MainManager::aspectRatio * camera.fovRad);
@@ -19,10 +19,12 @@ void Scene::Init()
     matrix.set(3, 3, 0.0f);
 
     meshes.reserve(100); // we allocate the
-    meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
+    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
 
     light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
@@ -45,42 +47,30 @@ void Scene::Render(float delta) const
     DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
     // change the light orientation through time
 
+//    directionalLight->SetDir({cosf(fTheta * 3.0f),
+//                              cosf(fTheta * 1.4f),
+//                              sinf(fTheta * 3.0f),
+//                             });
 
-    directionalLight->SetDir({cosf(fTheta * 3.0f),
-                              cosf(fTheta * 1.4f),
-                              sinf(fTheta * 3.0f),
-                             });
-
-
-    // Rotation Z
-    Matrix4x4 matRotZ = {0};
-    matRotZ.set(0, 0, cosf(fTheta));
-    matRotZ.set(0, 1, sinf(fTheta));
-    matRotZ.set(1, 0, -sinf(fTheta));
-    matRotZ.set(1, 1, cosf(fTheta));
-    matRotZ.set(2, 2, 1);
-    matRotZ.set(3, 3, 1);
-
-    // Rotation X
-    Matrix4x4 matRotX = {0};
-    matRotX.set(0, 0, 1);
-    matRotX.set(1, 1, cosf(fTheta * 0.5f));
-    matRotX.set(1, 2, sinf(fTheta * 0.5f));
-    matRotX.set(2, 1, -sinf(fTheta * 0.5f));
-    matRotX.set(2, 2, cosf(fTheta * 0.5f));
-    matRotX.set(3, 3, 1);
-
-    // Rotation Y
-    Matrix4x4 matRotY = {0};
-    matRotY.set(0, 0, cosf(fTheta * 0.5f));
-    matRotY.set(0, 2, sinf(fTheta * 0.5f));
-    matRotY.set(1, 1, 1);
-    matRotY.set(2, 0, -sinf(fTheta * 0.5f));
-    matRotY.set(2, 2, cosf(fTheta * 0.5f));
-    matRotY.set(3, 3, 1);
+    Vec3 up = {0.0f, 1.0f, 0.0f};
+    Vec3 target = camera.position + camera.lookDir;
 
 
-    Matrix4x4 matRotXZ = matRotX * matRotZ;
+//    camera.position.Print();
+//    lookDir.Print();
+//    target.Print();
+//    std::cout << std::endl;
+
+    Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, target, up);
+    Matrix4x4 matCameraInv = Matrix4x4::QuickInverse(matCamera);
+
+//    matCamera.Print();
+//    matCameraInv.Print();
+//    std::cout << std::endl;
+
+    Matrix4x4 matTransformed = Matrix4x4::Translation({0.0f, 0.0f, 12.0f});
+//                               * Matrix4x4::RotationZ(fTheta)
+//                               * Matrix4x4::RotationX(fTheta);
 
     std::vector<Triangle> trianglesToRaster;
 
@@ -88,28 +78,41 @@ void Scene::Render(float delta) const
     {
         for (const auto &tgl: mesh.triangles)
         {
-            Triangle tglTransformed;
-
-            // Rotate in Z-Axis
-            // Rotate in X-Axis
-
-//            tglTransformed.a = tgl.a * matRotXZ;
-//            tglTransformed.b = tgl.b * matRotXZ;
-//            tglTransformed.c = tgl.c * matRotXZ;
-            tglTransformed = tgl;
-
-            tglTransformed.a.z += 6.0f;
-            tglTransformed.b.z += 6.0f;
-            tglTransformed.c.z += 6.0f;
-
-            Vec3 normal = tglTransformed.norm();
+            Triangle tglTransformed = {
+                    tgl.a * matTransformed,
+                    tgl.b * matTransformed,
+                    tgl.c * matTransformed,
+            };
 
             // Check that the triangle is facing toward the camera
+            Vec3 normal = tglTransformed.norm();
             if (normal.DotProduct(camera.position.Diff(tglTransformed.a)) > 0.0f)
                 continue;
 
+//            Triangle tglViewed = {
+//                    tglTransformed.a * matCameraInv,
+//                    tglTransformed.b * matCameraInv,
+//                    tglTransformed.c * matCameraInv,
+//            };
+            Triangle tglViewed = {
+                    matCameraInv * tglTransformed.a,
+                    matCameraInv * tglTransformed.b,
+                    matCameraInv * tglTransformed.c,
+            };
+
+            matCameraInv.Print();
+            tglTransformed.a.Print();
+            tglViewed.a.Print();
+            (tglViewed.a - tglTransformed.a).Print();
+            std::cout << std::endl;
+
+
+//            tglViewed.a =  tglViewed.a / tglViewed.a.w;
+//            tglViewed.b =  tglViewed.b / tglViewed.b.w;
+//            tglViewed.c =  tglViewed.c / tglViewed.c.w;
+
             // Add in the to render list
-            trianglesToRaster.push_back(tglTransformed);
+            trianglesToRaster.push_back(tglViewed);
         }
     }
 

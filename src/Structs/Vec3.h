@@ -36,6 +36,9 @@ struct Vec3
 
     [[nodiscard]] Vec3 operator*(const Matrix4x4 &m) const;
 
+    Vec3 operator+=(const Vec3 &other);
+    Vec3 operator-=(const Vec3 &other);
+
     inline static Vec3 Zero()
     { return {0, 0, 0}; };
 

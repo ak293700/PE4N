@@ -30,4 +30,20 @@ struct Matrix4x4
     {
         return {};
     };
+
+    static Matrix4x4 Identity();
+
+    static Matrix4x4 Translation(const Vec3 &translation);
+
+    static Matrix4x4 RotationX(float angle);
+
+    static Matrix4x4 RotationY(float angle);
+
+    static Matrix4x4 RotationZ(float angle);
+
+    static Matrix4x4 PointAt(const Vec3 &pos, const Vec3 &target, const Vec3 &up);
+
+    static Matrix4x4 QuickInverse(const Matrix4x4 &m); // Only for Rotation/Translation Matrices
+
+    void Print() const;
 };
