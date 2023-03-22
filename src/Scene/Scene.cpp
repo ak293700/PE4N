@@ -44,7 +44,7 @@ void Scene::Render(float delta) const
 //                     (Uint8) (255.0f * (sinf(fTheta * 0.8f) + 1.0f) * 0.5f),
 //                     255});
 
-    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
+//    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
     // change the light orientation through time
 
 //    directionalLight->SetDir({cosf(fTheta * 3.0f),
@@ -52,10 +52,6 @@ void Scene::Render(float delta) const
 //                              sinf(fTheta * 3.0f),
 //                             });
 
-    Vec3 up = {0.0f, 1.0f, 0.0f};
-    Vec3 target = camera.position + camera.forward;
-
-//    Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, target, up);
     Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, camera.forward, camera.up, camera.right);
     Matrix4x4 matCameraInv = Matrix4x4::QuickInverse(matCamera);
 
