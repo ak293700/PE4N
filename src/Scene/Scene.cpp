@@ -8,7 +8,7 @@
 
 void Scene::Init()
 {
-    camera = {0.1f, 1000.0f, 90.0f, 0.0f, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
+    camera = {0.1f, 1000.0f, 90.0f};
     camera.computeFovRad();
 
     matrix.set(0, 0, MainManager::aspectRatio * camera.fovRad);
@@ -53,20 +53,11 @@ void Scene::Render(float delta) const
 //                             });
 
     Vec3 up = {0.0f, 1.0f, 0.0f};
-    Vec3 target = camera.position + camera.lookDir;
+    Vec3 target = camera.position + camera.forward;
 
-
-//    camera.position.Print();
-//    lookDir.Print();
-//    target.Print();
-//    std::cout << std::endl;
-
-    Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, target, up);
+//    Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, target, up);
+    Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, camera.forward, camera.up, camera.right);
     Matrix4x4 matCameraInv = Matrix4x4::QuickInverse(matCamera);
-
-//    matCamera.Print();
-//    matCameraInv.Print();
-//    std::cout << std::endl;
 
     Matrix4x4 matTransformed = Matrix4x4::Translation({0.0f, 0.0f, 12.0f});
 //                               * Matrix4x4::RotationZ(fTheta)
@@ -86,19 +77,19 @@ void Scene::Render(float delta) const
 
             // Check that the triangle is facing toward the camera
             Vec3 normal = tglTransformed.norm();
-            if (normal.DotProduct(camera.position.Diff(tglTransformed.a)) > 0.0f)
+
+            if (normal.similarity(tglTransformed.a - camera.position) > 0.0f)
                 continue;
 
-//            Triangle tglViewed = {
-//                    tglTransformed.a * matCameraInv,
-//                    tglTransformed.b * matCameraInv,
-//                    tglTransformed.c * matCameraInv,
-//            };
             Triangle tglViewed = {
                     matCameraInv * tglTransformed.a,
                     matCameraInv * tglTransformed.b,
                     matCameraInv * tglTransformed.c,
             };
+
+            // Basic clipping
+            if (tglViewed.a.z < camera.fNear || tglViewed.b.z < camera.fNear || tglViewed.c.z < camera.fNear)
+                continue;
 
             // Add in the to render list
             trianglesToRaster.push_back(tglViewed);
@@ -147,4 +138,36 @@ void Scene::Render(float delta) const
                        (Vec2) {pjt.c.x, pjt.c.y},
                        light->GetColor(tgl));
     }
+}
+
+void Scene::MoveCamera(float delta)
+{
+    static int len;
+    static const Uint8 *keys = SDL_GetKeyboardState(&len);
+
+    const float posSpeed = 5.0f;
+    const float yOrientationSpeed = 2.0f;
+    const float xOrientationSpeed = 2.0f;
+    if (keys[SDL_SCANCODE_W])
+        camera.position += camera.forward * posSpeed * delta;
+    if (keys[SDL_SCANCODE_S])
+        camera.position -= camera.forward * posSpeed * delta;
+    if (keys[SDL_SCANCODE_A])
+        camera.position -= camera.right * posSpeed * delta;
+    if (keys[SDL_SCANCODE_D])
+        camera.position += camera.right * posSpeed * delta;
+    if (keys[SDL_SCANCODE_E])
+        camera.position.y += posSpeed * delta;
+    if (keys[SDL_SCANCODE_R]) // R or pressing the command key
+        camera.position.y -= posSpeed * delta;
+    if (keys[SDL_SCANCODE_UP])
+        camera.pitch += xOrientationSpeed * delta;
+    if (keys[SDL_SCANCODE_DOWN])
+        camera.pitch -= xOrientationSpeed * delta;
+    if (keys[SDL_SCANCODE_LEFT])
+        camera.yaw += yOrientationSpeed * delta;
+    if (keys[SDL_SCANCODE_RIGHT])
+        camera.yaw -= yOrientationSpeed * delta;
+    if (keys[SDL_SCANCODE_SLASH])
+        camera.pitch = 0.0f;
 }

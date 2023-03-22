@@ -44,4 +44,6 @@ struct Vec3
 
     inline static Vec3 One()
     { return {1, 1, 1}; };
+
+    float similarity(const Vec3 &other) const;
 };

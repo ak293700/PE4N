@@ -1,6 +1,7 @@
 #include <cmath>
 #include "Matrix4x4.h"
 #include <iostream>
+#include "Camera.h"
 
 Matrix4x4 Matrix4x4::Transpose() const
 {
@@ -120,28 +121,12 @@ Matrix4x4 Matrix4x4::RotationZ(float angle)
     };
 }
 
-Matrix4x4 Matrix4x4::PointAt(const Vec3 &pos, const Vec3 &target, const Vec3 &up)
+Matrix4x4 Matrix4x4::PointAt(const Vec3 &pos, const Vec3 &forward, const Vec3 &up, const Vec3 &right)
 {
-    Vec3 newForward = (target - pos).Normalize();
-
-    Vec3 a = newForward * up.DotProduct(newForward);
-    Vec3 newUp = (up - a).Normalize();
-
-    Vec3 newRight = newUp.CrossProduct(newForward);
-
-//    pos.Print();
-//    target.Print();
-//    up.Print();
-
-//    newForward.Print();
-//    newUp.Print();
-//    newRight.Print();
-//    std::cout << std::endl;
-
     return {
-            newRight.x, newRight.y, newRight.z, 0.0f,
-            newUp.x, newUp.y, newUp.z, 0.0f,
-            newForward.x, newForward.y, newForward.z, 0.0f,
+            right.x, right.y, right.z, 0.0f,
+            up.x, up.y, up.z, 0.0f,
+            forward.x, forward.y, forward.z, 0.0f,
             pos.x, pos.y, pos.z, 1.0f
     };
 }

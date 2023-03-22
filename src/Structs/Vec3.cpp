@@ -140,3 +140,8 @@ Vec3 Vec3::operator-=(const Vec3 &other)
     z -= other.z;
     return *this;
 }
+
+float Vec3::similarity(const Vec3 &other) const
+{
+    return DotProduct(other) / (Length() * other.Length());
+}
