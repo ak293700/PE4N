@@ -1,7 +1,7 @@
 #include <cmath>
 #include "Matrix4x4.h"
 #include <iostream>
-#include "Camera.h"
+#include "../Camera/Camera.h"
 
 Matrix4x4 Matrix4x4::Transpose() const
 {

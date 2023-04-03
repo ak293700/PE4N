@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Vec3.h"
+#include "../Vec3/Vec3.h"
 #include "optional"
-#include "Triangle.h"
+#include "../Triangle/Triangle.h"
 
 struct Plane {
     Vec3 p; // point that exists on the plane

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SDL.h>
-#include "../Structs/Vec3.h"
-#include "../Structs/Triangle.h"
+#include "../Structs/Vec3/Vec3.h"
+#include "../Structs/Triangle/Triangle.h"
 #include "Light.h"
 
 class DirectionalLight : public Light

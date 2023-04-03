@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL.h>
-#include "../Structs/Triangle.h"
+#include "../Structs/Triangle/Triangle.h"
 
 class Light
 {

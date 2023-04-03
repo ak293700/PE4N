@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cmath>
-#include "Vec3.h"
-#include "Matrix4x4.h"
+#include "../Vec3/Vec3.h"
+#include "../Matrix/Matrix4x4.h"
 
 struct Camera
 {

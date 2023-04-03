@@ -1,9 +1,9 @@
 #include "Scene.h"
 #include "../MainManager/MainManager.h"
-#include "../Structs/Vec2.h"
+#include "../Structs/Vec2/Vec2.h"
 #include "../Drawers/Colors.h"
 #include "../Drawers/DrawerTool.h"
-#include "../Structs/Plane.h"
+#include "../Structs/Plane/Plane.h"
 #include <algorithm>
 
 
@@ -25,7 +25,7 @@ void Scene::Init()
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
-//    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
+    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
 
     light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
@@ -69,37 +69,31 @@ void Scene::Render(float delta) const
                     tgl.a * matTransformed,
                     tgl.b * matTransformed,
                     tgl.c * matTransformed,
+                    tgl.texture
             };
 
             // Check that the triangle is facing toward the camera
-            Vec3 normal = tglTransformed.norm();
-
-            if (normal.similarity(tglTransformed.a - camera.position) > 0.0f)
+            if (tglTransformed.norm().similarity(tglTransformed.a - camera.position) > 0.0f)
                 continue;
 
             Triangle tglViewed = {
                     matCameraInv * tglTransformed.a,
                     matCameraInv * tglTransformed.b,
                     matCameraInv * tglTransformed.c,
+                    tglTransformed.texture
             };
 
-            // Basic clipping
-//            if (tglViewed.a.z < camera.fNear || tglViewed.b.z < camera.fNear || tglViewed.c.z < camera.fNear)
-//                continue;
+            // compute the color
+            tglViewed.texture.color = light->GetColor(tglViewed);
 
+            // Basic clipping
             // Clip the triangle against the near plane
-            Plane plane = { {0.0f, 0.0f, 2.0f/*camera.fNear*/}, {0.0f, 0.0f, 1.0f}};
+            Plane plane = { {0.0f, 0.0f, camera.fNear}, {0.0f, 0.0f, 1.0f}};
             Triangle clipped[2]; // vector to store the clipped triangles
             int numberOfClippedTriangles = plane.TriangleClipAgainstPlane(tglViewed, clipped[0], clipped[1]);
 
-//            std::cout << "numberOfClippedTriangles: " << numberOfClippedTriangles << std::endl;
-
             for (int i = 0; i < numberOfClippedTriangles; ++i)
                 trianglesToRaster.push_back(clipped[i]);
-
-
-            // Add in the to render list
-//            trianglesToRaster.push_back(tglViewed);
         }
     }
 
@@ -143,7 +137,7 @@ void Scene::Render(float delta) const
         Draw2dTriangle((Vec2) {pjt.a.x, pjt.a.y},
                        (Vec2) {pjt.b.x, pjt.b.y},
                        (Vec2) {pjt.c.x, pjt.c.y},
-                       light->GetColor(tgl));
+                       tgl.texture.color);
     }
 }
 
@@ -152,9 +146,9 @@ void Scene::MoveCamera(float delta)
     static int len;
     static const Uint8 *keys = SDL_GetKeyboardState(&len);
 
-    const float posSpeed = 5.0f;
-    const float yOrientationSpeed = 2.0f;
-    const float xOrientationSpeed = 2.0f;
+    const float posSpeed = 3.0f;
+    const float yOrientationSpeed = 1.8f;
+    const float xOrientationSpeed = 1.8f;
     if (keys[SDL_SCANCODE_W])
         camera.position += camera.forward * posSpeed * delta;
     if (keys[SDL_SCANCODE_S])

@@ -1,7 +1,7 @@
 #include "MainManager.h"
 #include "../Drawers/FramerateDrawer/UiDrawer.h"
 #include "../Drawers/Colors.h"
-#include "../Structs/Vec2.h"
+#include "../Structs/Vec2/Vec2.h"
 #include "../Drawers/DrawerTool.h"
 
 SDL_Window *MainManager::window = nullptr;

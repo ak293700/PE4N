@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
-#include "../Structs/Mesh.h"
-#include "../Structs/Camera.h"
-#include "../Structs/Matrix4x4.h"
+#include "../Structs/Mesh/Mesh.h"
+#include "../Structs/Camera/Camera.h"
+#include "../Structs/Matrix/Matrix4x4.h"
 #include "../Lights/DirectionalLight.h"
 #include <SDL.h>
 

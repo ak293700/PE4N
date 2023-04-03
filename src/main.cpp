@@ -1,6 +1,5 @@
 #include "MainManager/MainManager.h"
 #include "Drawers/Colors.h"
-#include "Structs/Plane.h"
 
 int main()
 {
@@ -34,7 +33,7 @@ int main()
                     {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}}
             }
     };
-    MainManager::scene.meshes.push_back(cube);
+//    MainManager::scene.meshes.push_back(cube);
 
     Mesh triangle = {
             {
