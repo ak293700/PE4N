@@ -9,18 +9,18 @@ struct Vec3
     float y;
     float z;
 
-    [[nodiscard]] Vec3 CrossProduct(const Vec3 &other) const;
+    [[nodiscard]] Vec3 cross(const Vec3 &other) const;
 
-    [[nodiscard]] float DotProduct(const Vec3 &other) const;
+    [[nodiscard]] float dot(const Vec3 &other) const;
 
     // other - this
-    [[nodiscard]] Vec3 Diff(const Vec3 &other) const;
+    [[nodiscard]] Vec3 diff(const Vec3 &other) const;
 
-    void Print() const;
+    void print() const;
 
-    [[nodiscard]] float Length() const;
+    [[nodiscard]] float diff() const;
 
-    [[nodiscard]] Vec3 Normalize() const;
+    [[nodiscard]] Vec3 normalize() const;
 
     [[nodiscard]] Vec3 operator+(const Vec3 &other) const;
 

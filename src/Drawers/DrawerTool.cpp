@@ -84,3 +84,26 @@ inline void DrawLineImpl(const Vec2 &a, const Vec2 &b)
 {
     SDL_RenderDrawLine(MainManager::renderer, (int) a.x, (int) a.y, (int) b.x, (int) b.y);
 }
+
+void DrawFilledCircle(const Vec2& center, float radius, const SDL_Color& color)
+{
+    SetColor(color);
+    int x = (int) center.x;
+    int y = (int) center.y;
+    int r = (int) radius;
+    int x0 = x - r;
+    int x1 = x + r;
+    int y0 = y - r;
+    int y1 = y + r;
+
+    for (int i = x0; i <= x1; i++)
+    {
+        for (int j = y0; j <= y1; j++)
+        {
+            int dx = i - x;
+            int dy = j - y;
+            if (dx * dx + dy * dy <= r * r)
+                SDL_RenderDrawPoint(MainManager::renderer, i, j);
+        }
+    }
+}

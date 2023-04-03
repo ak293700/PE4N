@@ -16,4 +16,6 @@ void DrawLineImpl(const Vec2& a, const Vec2& b);
 
 void SetColor(const SDL_Color& color);
 
+void DrawFilledCircle(const Vec2& center, float radius, const SDL_Color& color);
+
 

@@ -142,7 +142,7 @@ Matrix4x4 Matrix4x4::QuickInverse(const Matrix4x4 &m)
             AxisX.x, AxisY.x, AxisZ.x, 0.0f,
             AxisX.y, AxisY.y, AxisZ.y, 0.0f,
             AxisX.z, AxisY.z, AxisZ.z, 0.0f,
-            -Translation.DotProduct(AxisX), -Translation.DotProduct(AxisY), -Translation.DotProduct(AxisZ), 1.0f
+            -Translation.dot(AxisX), -Translation.dot(AxisY), -Translation.dot(AxisZ), 1.0f
     };
 
     /*return {

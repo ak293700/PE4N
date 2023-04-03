@@ -1,5 +1,6 @@
 #include "MainManager/MainManager.h"
 #include "Drawers/Colors.h"
+#include "Structs/Plane.h"
 
 int main()
 {
@@ -45,9 +46,10 @@ int main()
             }
 
     };
-    MainManager::scene.meshes.push_back(triangle);
+//    MainManager::scene.meshes.push_back(triangle);
 
     MainManager::Main();
+
 
     MainManager::Quit();
 

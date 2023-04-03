@@ -20,7 +20,7 @@ Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
         std::stringstream ss = std::stringstream(line);
         std::string type;
         ss >> type;
-        if (!std::equal(type.begin(), type.end(), "v"))
+        if (type != "v")
             continue;
 
         Vec3 v = Vec3();
@@ -32,17 +32,16 @@ Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
     file.clear();
     file.seekg(0, std::ios::beg);
 
-    int tmp = 0;
+    int fCount = 0;
     while (std::getline(file, line))
     {
         std::stringstream ss = std::stringstream(line);
         std::string type;
         ss >> type;
-        if (!std::equal(type.begin(), type.end(), "f"))
+        if (type != "f")
             continue;
 
-        if (++tmp == 5427)
-            tmp = tmp;
+        fCount++;
 
         std::vector<Vec3> polygon_vertices;
         std::string vertex_string;
@@ -57,7 +56,6 @@ Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
         for (size_t i = 2; i < polygon_vertices.size(); i++)
             result.triangles.push_back({polygon_vertices[0], polygon_vertices[i-1], polygon_vertices[i]});
     }
-
 
     file.close();
     return result;

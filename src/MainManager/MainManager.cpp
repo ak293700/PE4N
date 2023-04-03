@@ -1,6 +1,8 @@
 #include "MainManager.h"
 #include "../Drawers/FramerateDrawer/UiDrawer.h"
 #include "../Drawers/Colors.h"
+#include "../Structs/Vec2.h"
+#include "../Drawers/DrawerTool.h"
 
 SDL_Window *MainManager::window = nullptr;
 SDL_Renderer *MainManager::renderer = nullptr;
@@ -83,11 +85,16 @@ void MainManager::Main()
 void MainManager::Run(float delta)
 {
     Clear();
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+
     scene.MoveCamera(delta);
     scene.camera.RecomputeForwardUpAndRight();
     scene.Render(delta);
     displayFPS();
     displayOrientation(scene.camera.yaw);
+
+    DrawFilledCircle((Vec2){(float)x, (float)y}, 5.0f, Colors::Green);
 
     SDL_RenderPresent(MainManager::renderer);
 }

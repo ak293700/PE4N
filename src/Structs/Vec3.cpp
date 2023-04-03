@@ -2,7 +2,7 @@
 #include <iostream>
 #import <math.h>
 
-Vec3 Vec3::CrossProduct(const Vec3 &other) const
+Vec3 Vec3::cross(const Vec3 &other) const
 {
     return {
             y * other.z - z * other.y,
@@ -11,12 +11,12 @@ Vec3 Vec3::CrossProduct(const Vec3 &other) const
     };
 }
 
-float Vec3::DotProduct(const Vec3 &other) const
+float Vec3::dot(const Vec3 &other) const
 {
     return x * other.x + y * other.y + z * other.z;
 }
 
-Vec3 Vec3::Diff(const Vec3 &other) const
+Vec3 Vec3::diff(const Vec3 &other) const
 {
     return {
             other.x - x,
@@ -25,19 +25,19 @@ Vec3 Vec3::Diff(const Vec3 &other) const
     };
 }
 
-void Vec3::Print() const
+void Vec3::print() const
 {
     std::cout << '(' << x << ", " << y << ", " << z << ')' << '\n';
 }
 
-float Vec3::Length() const
+float Vec3::diff() const
 {
     return sqrt(x * x + y * y + z * z);
 }
 
-Vec3 Vec3::Normalize() const
+Vec3 Vec3::normalize() const
 {
-    float length = Length();
+    float length = diff();
     if (length == 0)
         return {0, 0, 0};
 
@@ -143,5 +143,5 @@ Vec3 Vec3::operator-=(const Vec3 &other)
 
 float Vec3::similarity(const Vec3 &other) const
 {
-    return DotProduct(other) / (Length() * other.Length());
+    return dot(other) / (diff() * other.diff());
 }

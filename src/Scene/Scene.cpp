@@ -3,6 +3,7 @@
 #include "../Structs/Vec2.h"
 #include "../Drawers/Colors.h"
 #include "../Drawers/DrawerTool.h"
+#include "../Structs/Plane.h"
 #include <algorithm>
 
 
@@ -24,7 +25,7 @@ void Scene::Init()
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
-    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
 
     light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
@@ -44,9 +45,8 @@ void Scene::Render(float delta) const
 //                     (Uint8) (255.0f * (sinf(fTheta * 0.8f) + 1.0f) * 0.5f),
 //                     255});
 
-//    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
     // change the light orientation through time
-
+//    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
 //    directionalLight->SetDir({cosf(fTheta * 3.0f),
 //                              cosf(fTheta * 1.4f),
 //                              sinf(fTheta * 3.0f),
@@ -84,11 +84,22 @@ void Scene::Render(float delta) const
             };
 
             // Basic clipping
-            if (tglViewed.a.z < camera.fNear || tglViewed.b.z < camera.fNear || tglViewed.c.z < camera.fNear)
-                continue;
+//            if (tglViewed.a.z < camera.fNear || tglViewed.b.z < camera.fNear || tglViewed.c.z < camera.fNear)
+//                continue;
+
+            // Clip the triangle against the near plane
+            Plane plane = { {0.0f, 0.0f, 2.0f/*camera.fNear*/}, {0.0f, 0.0f, 1.0f}};
+            Triangle clipped[2]; // vector to store the clipped triangles
+            int numberOfClippedTriangles = plane.TriangleClipAgainstPlane(tglViewed, clipped[0], clipped[1]);
+
+//            std::cout << "numberOfClippedTriangles: " << numberOfClippedTriangles << std::endl;
+
+            for (int i = 0; i < numberOfClippedTriangles; ++i)
+                trianglesToRaster.push_back(clipped[i]);
+
 
             // Add in the to render list
-            trianglesToRaster.push_back(tglViewed);
+//            trianglesToRaster.push_back(tglViewed);
         }
     }
 
@@ -166,4 +177,6 @@ void Scene::MoveCamera(float delta)
         camera.yaw -= yOrientationSpeed * delta;
     if (keys[SDL_SCANCODE_SLASH])
         camera.pitch = 0.0f;
+
+    camera.pitch = std::clamp(camera.pitch, -1.57f, 1.57f);
 }

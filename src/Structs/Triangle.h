@@ -8,5 +8,7 @@ struct Triangle
     Vec3 b;
     Vec3 c;
 
-    Vec3 norm() const;
+    [[nodiscard]] Vec3 norm() const;
+
+    void print() const;
 };

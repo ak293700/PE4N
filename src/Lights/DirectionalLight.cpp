@@ -1,15 +1,15 @@
 #include "DirectionalLight.h"
 
 DirectionalLight::DirectionalLight(Vec3 dir, SDL_Color color)
-        : Light(color), dir(dir.Normalize())
+        : Light(color), dir(dir.normalize())
 {
 }
 
 SDL_Color DirectionalLight::GetColor(const Triangle &tgl) const
 {
     Vec3 norm = tgl.norm() * -1.0f;
-    float dP = norm.DotProduct(dir);
-    float nL = norm.Length();
+    float dP = norm.dot(dir);
+    float nL = norm.diff();
 
     float same = 1.0f;
     if (nL != 0.0f)
@@ -31,5 +31,5 @@ SDL_Color DirectionalLight::GetColor(const Triangle &tgl) const
 
 void DirectionalLight::SetDir(const Vec3 &_dir)
 {
-    dir = _dir.Normalize();
+    dir = _dir.normalize();
 }
