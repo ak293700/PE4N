@@ -13,8 +13,15 @@ public:
     Matrix4x4 matrix;
     Light *light;
 
+
+    Scene() {}
+    Scene(Camera camera) : camera(camera) {
+        Init();
+    }
+
     void Init();
     void Quit();
     void Render(float delta) const;
     void MoveCamera(float delta);
+    void ClipTriangle(std::vector<Triangle> &trianglesToRaster, const Triangle& tgl) const;
 };

@@ -16,14 +16,25 @@ public:
     Vec3 up = {0.0f, 1.0f, 0.0f};
     Vec3 right = {1.0f, 0.0f, 0.0f};
 
+    Vec3 leftViewPlaneNormal;
+    Vec3 rightViewPlaneNormal;
+    Vec3 topViewPlaneNormal;
+    Vec3 bottomViewPlaneNormal;
+
     float yaw = 0.0f;
     float pitch = 0.0f;
 
-    void computeFovRad()
+
+    Camera() : Camera(0.1f, 1000.0f, 90.0f, {0.0f, 0.0f, 0.0f}) {};
+
+    Camera(float fNear, float fFar, float fov, Vec3 position)
+        : fNear(fNear), fFar(fFar), fov(fov), position(position)
     {
-        // tanf take radiant as an entry
-        fovRad = 1.0f / tanf(fov * 0.5f / 180.0f * M_PI);
+        RecomputeForwardUpAndRight();
+        initProperties();
     }
+
+    void initProperties();
 
     void RecomputeForwardUpAndRight();
 };

@@ -1,4 +1,5 @@
 #include "Plane.h"
+#include "../../Drawers/Colors.h"
 #include <iostream>
 
 Vec3 Plane::GetIntersectionPoint(const Vec3 &a, const Vec3 &b) const {
@@ -60,6 +61,8 @@ int Plane::TriangleClipAgainstPlane(const Triangle &in, Triangle &out1, Triangle
         out1.b = GetIntersectionPoint(*insidePoints[0], *outsidePoints[0]);
         out1.c = GetIntersectionPoint(*insidePoints[0], *outsidePoints[1]);
         out1.texture = in.texture;
+        out1.texture.color.r = 0;
+        out1.texture.color.b = 0;
         return 1;
     }
 
@@ -69,11 +72,15 @@ int Plane::TriangleClipAgainstPlane(const Triangle &in, Triangle &out1, Triangle
     out1.b = *insidePoints[1];
     out1.c = GetIntersectionPoint(*insidePoints[0], *outsidePoints[0]);
     out1.texture = in.texture;
+    out1.texture.color.r = 0;
+    out1.texture.color.g = 0;
 
     out2.a = *insidePoints[1];
     out2.b = GetIntersectionPoint(*insidePoints[1], *outsidePoints[0]);
     out2.c = out1.c;
     out2.texture = in.texture;
+    out2.texture.color.g = 0;
+    out2.texture.color.b = 0;
 
     return 2;
 }

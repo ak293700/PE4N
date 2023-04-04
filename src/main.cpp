@@ -1,8 +1,7 @@
 #include "MainManager/MainManager.h"
 #include "Drawers/Colors.h"
 
-int main()
-{
+int main() {
     MainManager::Init(800, 800);
 
     // Define the 12 triangles of the cube
@@ -37,7 +36,6 @@ int main()
 
     Mesh triangle = {
             {
-
                     {{0.0f, 1.0f, 0.0f}, {0.5f, 1.5f, 0.5f}, {1.0f, 1.0f, 0.0f}},
                     {{1.0f, 1.0f, 1.0f}, {0.5f, 1.5f, 0.5f}, {0.0f, 1.0f, 1.0f}},
                     {{1.0f, 1.0f, 0.0f}, {0.5f, 1.5f, 0.5f}, {1.0f, 1.0f, 1.0f}},

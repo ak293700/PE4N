@@ -11,7 +11,7 @@ TTF_Font *MainManager::font = nullptr;
 float MainManager::aspectRatio = 0.0f;
 int MainManager::width = 0;
 int MainManager::height = 0;
-Scene MainManager::scene = *new Scene();
+Scene MainManager::scene = Scene();
 
 void MainManager::Init(int _width, int _height)
 {

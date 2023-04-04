@@ -1,7 +1,6 @@
 #include "Camera.h"
 
-void Camera::RecomputeForwardUpAndRight()
-{
+void Camera::RecomputeForwardUpAndRight() {
 //    forward = {cosf(yaw) * cosf(pitch),sinf(pitch),sinf(yaw) * cosf(pitch)};
 //    forward = forward.normalize();
 
@@ -13,4 +12,27 @@ void Camera::RecomputeForwardUpAndRight()
     Vec3 a = forward * baseUp.dot(forward);
     up = (baseUp - a).normalize();
     right = up.cross(forward);
+}
+
+void Camera::initProperties() {
+    // tanf take radiant as an entry
+    fovRad = 1.0f / tanf(fov * 0.5f / 180.0f * M_PI);
+
+    // we assume that the forward vector are well initialized
+
+    // we compute the normal of the view plane
+//    leftViewPlaneNormal = (forward - right * fovRad).normalize();
+//    rightViewPlaneNormal = (forward + right * fovRad).normalize();
+//    topViewPlaneNormal = (forward - up * fovRad).normalize();
+//    bottomViewPlaneNormal = (forward + up * fovRad).normalize();
+
+    leftViewPlaneNormal = (forward + right * fovRad).normalize();
+    rightViewPlaneNormal = (forward - right * fovRad).normalize();
+    topViewPlaneNormal = (forward - up * fovRad).normalize();
+    bottomViewPlaneNormal = (forward + up * fovRad).normalize();
+
+    leftViewPlaneNormal.print();
+    rightViewPlaneNormal.print();
+    topViewPlaneNormal.print();
+    bottomViewPlaneNormal.print();
 }

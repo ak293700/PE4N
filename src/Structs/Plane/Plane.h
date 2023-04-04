@@ -8,6 +8,7 @@ struct Plane {
     Vec3 p; // point that exists on the plane
     Vec3 normal; // normal vector of the plane, must be normalized
 
+    Plane() = default;
     Plane(Vec3 p, Vec3 normal) : p(p), normal(normal.normalize())
     {}
 

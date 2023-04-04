@@ -9,8 +9,7 @@
 
 void Scene::Init()
 {
-    camera = {0.1f, 1000.0f, 90.0f};
-    camera.computeFovRad();
+//    camera = Camera(0.1f, 1000.0f, 90.0f, {0.0f, 0.0f, 0.0f});
 
     matrix.set(0, 0, MainManager::aspectRatio * camera.fovRad);
     matrix.set(1, 1, camera.fovRad);
@@ -21,17 +20,29 @@ void Scene::Init()
 
     meshes.reserve(100); // we allocate the
 //    meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
-//    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
+    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
-    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
 
     light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
 
 void Scene::Quit()
 {
+}
+
+void Scene::ClipTriangle(std::vector<Triangle> &trianglesToRaster, const Triangle& tgl) const
+{
+    // Clip the triangle against the near plane
+     Plane plane = { {0.0f, 0.0f, camera.fNear}, camera.leftViewPlaneNormal};
+
+    Triangle clipped[2]; // vector to store the clipped triangles
+    int numberOfClippedTriangles = plane.TriangleClipAgainstPlane(tgl, clipped[0], clipped[1]);
+
+    for (int i = 0; i < numberOfClippedTriangles; ++i)
+        trianglesToRaster.push_back(clipped[i]);
 }
 
 void Scene::Render(float delta) const
@@ -86,14 +97,7 @@ void Scene::Render(float delta) const
             // compute the color
             tglViewed.texture.color = light->GetColor(tglViewed);
 
-            // Basic clipping
-            // Clip the triangle against the near plane
-            Plane plane = { {0.0f, 0.0f, camera.fNear}, {0.0f, 0.0f, 1.0f}};
-            Triangle clipped[2]; // vector to store the clipped triangles
-            int numberOfClippedTriangles = plane.TriangleClipAgainstPlane(tglViewed, clipped[0], clipped[1]);
-
-            for (int i = 0; i < numberOfClippedTriangles; ++i)
-                trianglesToRaster.push_back(clipped[i]);
+            ClipTriangle(trianglesToRaster, tglViewed);
         }
     }
 
@@ -105,6 +109,8 @@ void Scene::Render(float delta) const
         return zA > zB;
     });
 
+    auto fWidth = (float) MainManager::width;
+    auto fHeight = (float) MainManager::height;
     for (const auto &tgl: trianglesToRaster)
     {
         // Project the triangle and render it
@@ -121,9 +127,6 @@ void Scene::Render(float delta) const
 
         pjt.c.x += 1.0f;
         pjt.c.y += 1.0f;
-
-        float fWidth = (float) MainManager::width;
-        float fHeight = (float) MainManager::height;
 
         pjt.a.x *= 0.5f * fWidth;
         pjt.a.y *= 0.5f * fHeight;
