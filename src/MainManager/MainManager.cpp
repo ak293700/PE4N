@@ -29,7 +29,7 @@ void MainManager::Init(int _width, int _height)
     if (font == nullptr)
         throw std::runtime_error(TTF_GetError());
 
-    window = SDL_CreateWindow("My Game",
+    window = SDL_CreateWindow("PE4N",
                               SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                               width, height,
                               SDL_WINDOW_SHOWN);
@@ -93,8 +93,6 @@ void MainManager::Run(float delta)
     scene.Render(delta);
     displayFPS();
     displayOrientation(scene.camera.yaw);
-
-    DrawFilledCircle((Vec2){(float)x, (float)y}, 5.0f, Colors::Green);
 
     SDL_RenderPresent(MainManager::renderer);
 }

@@ -21,18 +21,8 @@ void Camera::initProperties() {
     // we assume that the forward vector are well initialized
 
     // we compute the normal of the view plane
-//    leftViewPlaneNormal = (forward - right * fovRad).normalize();
-//    rightViewPlaneNormal = (forward + right * fovRad).normalize();
-//    topViewPlaneNormal = (forward - up * fovRad).normalize();
-//    bottomViewPlaneNormal = (forward + up * fovRad).normalize();
-
     leftViewPlaneNormal = (forward + right * fovRad).normalize();
     rightViewPlaneNormal = (forward - right * fovRad).normalize();
     topViewPlaneNormal = (forward - up * fovRad).normalize();
     bottomViewPlaneNormal = (forward + up * fovRad).normalize();
-
-    leftViewPlaneNormal.print();
-    rightViewPlaneNormal.print();
-    topViewPlaneNormal.print();
-    bottomViewPlaneNormal.print();
 }

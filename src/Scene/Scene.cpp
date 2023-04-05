@@ -20,11 +20,11 @@ void Scene::Init()
 
     meshes.reserve(100); // we allocate the
 //    meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
-    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
-//    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
+    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
-//    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 5.0f}));
 
     light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
@@ -33,16 +33,55 @@ void Scene::Quit()
 {
 }
 
-void Scene::ClipTriangle(std::vector<Triangle> &trianglesToRaster, const Triangle& tgl) const
+void Scene::ClipTriangle(std::vector<Triangle> &trianglesToRaster, const Triangle& baseTgl) const
 {
-    // Clip the triangle against the near plane
-     Plane plane = { {0.0f, 0.0f, camera.fNear}, camera.leftViewPlaneNormal};
+    // we do nit want to clip again the triangles that are already clipped
+    // because we add the clipped triangle directly to the trianglesToRaster vector
+    unsigned long baseTrianglesToRasterSize = trianglesToRaster.size();
+    trianglesToRaster.push_back(baseTgl);
 
-    Triangle clipped[2]; // vector to store the clipped triangles
-    int numberOfClippedTriangles = plane.TriangleClipAgainstPlane(tgl, clipped[0], clipped[1]);
+    ClipTriangleAgainstPlane(trianglesToRaster,
+                             { {0.0f, 0.0f, camera.fNear}, {0.0f, 0.0f, 1.0f}},
+                             baseTrianglesToRasterSize);
 
-    for (int i = 0; i < numberOfClippedTriangles; ++i)
-        trianglesToRaster.push_back(clipped[i]);
+    ClipTriangleAgainstPlane(trianglesToRaster,
+                             { {0.0f, 0.0f, 0.0f}, camera.leftViewPlaneNormal},
+                             baseTrianglesToRasterSize);
+
+    ClipTriangleAgainstPlane(trianglesToRaster,
+                             { {0.0f, 0.0f, 0.0f}, camera.rightViewPlaneNormal},
+                             baseTrianglesToRasterSize);
+
+    ClipTriangleAgainstPlane(trianglesToRaster,
+                             { {0.0f, 0.0f, 0.0f}, camera.bottomViewPlaneNormal},
+                             baseTrianglesToRasterSize);
+
+    ClipTriangleAgainstPlane(trianglesToRaster,
+                             { {0.0f, 0.0f, 0.0f}, camera.topViewPlaneNormal},
+                             baseTrianglesToRasterSize);
+}
+
+void Scene::ClipTriangleAgainstPlane(std::vector<Triangle> &trianglesToRaster, const Plane &plane,
+                                     size_t baseTrianglesToRasterSize) const {
+    size_t currentTrianglesToRasterSize = trianglesToRaster.size();
+    for (size_t i = baseTrianglesToRasterSize; i < currentTrianglesToRasterSize; ++i)
+    {
+        Triangle clipped[2]; // vector to store the clipped triangles
+        int numberOfClippedTriangles = plane.TriangleClipAgainstPlane(trianglesToRaster[i], clipped[0], clipped[1]);
+
+        if (numberOfClippedTriangles == 0)
+        {
+            trianglesToRaster.erase(trianglesToRaster.begin() + (long)i--); // remove the triangle and decrement the index
+            currentTrianglesToRasterSize--;
+        }
+        else if (numberOfClippedTriangles == 1)
+            trianglesToRaster[i] = clipped[0]; // we replace the triangle with the clipped one
+        else if (numberOfClippedTriangles == 2)
+        {
+            trianglesToRaster[i] = clipped[0]; // replace the first one
+            trianglesToRaster.push_back(clipped[1]); // add the second one
+        }
+    }
 }
 
 void Scene::Render(float delta) const
@@ -57,18 +96,14 @@ void Scene::Render(float delta) const
 //                     255});
 
     // change the light orientation through time
-//    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
-//    directionalLight->SetDir({cosf(fTheta * 3.0f),
-//                              cosf(fTheta * 1.4f),
-//                              sinf(fTheta * 3.0f),
-//                             });
+    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
+    directionalLight->SetDir({cosf(fTheta * 3.0f),
+                              cosf(fTheta * 1.4f),
+                              sinf(fTheta * 3.0f),
+                             });
 
     Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, camera.forward, camera.up, camera.right);
     Matrix4x4 matCameraInv = Matrix4x4::QuickInverse(matCamera);
-
-    Matrix4x4 matTransformed = Matrix4x4::Translation({0.0f, 0.0f, 12.0f});
-//                               * Matrix4x4::RotationZ(fTheta)
-//                               * Matrix4x4::RotationX(fTheta);
 
     std::vector<Triangle> trianglesToRaster;
 
@@ -76,26 +111,19 @@ void Scene::Render(float delta) const
     {
         for (const auto &tgl: mesh.triangles)
         {
-            Triangle tglTransformed = {
-                    tgl.a * matTransformed,
-                    tgl.b * matTransformed,
-                    tgl.c * matTransformed,
-                    tgl.texture
-            };
-
             // Check that the triangle is facing toward the camera
-            if (tglTransformed.norm().similarity(tglTransformed.a - camera.position) > 0.0f)
+            if (tgl.norm().similarity(tgl.a - camera.position) > 0.0f)
                 continue;
 
             Triangle tglViewed = {
-                    matCameraInv * tglTransformed.a,
-                    matCameraInv * tglTransformed.b,
-                    matCameraInv * tglTransformed.c,
-                    tglTransformed.texture
+                    matCameraInv * tgl.a,
+                    matCameraInv * tgl.b,
+                    matCameraInv * tgl.c,
+                    tgl.texture
             };
 
-            // compute the color
-            tglViewed.texture.color = light->GetColor(tglViewed);
+            // compute the color using the triangle of the regular space
+            tglViewed.texture.color = light->GetColor(tgl);
 
             ClipTriangle(trianglesToRaster, tglViewed);
         }

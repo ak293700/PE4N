@@ -57,7 +57,7 @@ void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color
         }
     }
 
-    Draw2dTriangleOutline(a, b, c, Colors::Red);
+//    Draw2dTriangleOutline(a, b, c, Colors::Red);
 }
 
 void Draw2dTriangleOutline(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color &color)
