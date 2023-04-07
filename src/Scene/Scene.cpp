@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "../MainManager/MainManager.h"
+#include "../Application/Application.h"
 #include "../Structs/Vec2/Vec2.h"
 #include "../Drawers/Colors.h"
 #include "../Drawers/DrawerTool.h"
@@ -9,9 +9,7 @@
 
 void Scene::Init()
 {
-//    camera = Camera(0.1f, 1000.0f, 90.0f, {0.0f, 0.0f, 0.0f});
-
-    matrix.set(0, 0, MainManager::aspectRatio * camera.fovRad);
+    matrix.set(0, 0, Application::aspectRatio * camera.fovRad);
     matrix.set(1, 1, camera.fovRad);
     matrix.set(2, 2, camera.fFar / (camera.fFar - camera.fNear));
     matrix.set(3, 2, (-camera.fFar * camera.fNear) / (camera.fFar - camera.fNear));
@@ -19,14 +17,17 @@ void Scene::Init()
     matrix.set(3, 3, 0.0f);
 
     meshes.reserve(100); // we allocate the
-//    meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
-//    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
+    meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../asse/ts/rammer.obj", 0.1f, {0.0f, -3.0f, 3.0f}));
+//    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, -3.0f}));
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
-    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 5.0f}));
+//    meshes.push_back(Mesh::Load("../assets/mountain.obj", 1.0f, {0.0f, -15.0f, 5.0f}));
+//    meshes.push_back(Mesh::Load("../assets/cube.obj", 1.0f, {0.0f, 0.0f, 3.0f}));
 
-    light = new DirectionalLight({0.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
+    light = new DirectionalLight({1.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
 
 void Scene::Quit()
@@ -96,11 +97,11 @@ void Scene::Render(float delta) const
 //                     255});
 
     // change the light orientation through time
-    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
-    directionalLight->SetDir({cosf(fTheta * 3.0f),
-                              cosf(fTheta * 1.4f),
-                              sinf(fTheta * 3.0f),
-                             });
+//    DirectionalLight *directionalLight = dynamic_cast<DirectionalLight *>(light);
+//    directionalLight->SetDir({cosf(fTheta * 3.0f),
+//                              cosf(fTheta * 1.4f),
+//                              sinf(fTheta * 3.0f),
+//                             });
 
     Matrix4x4 matCamera = Matrix4x4::PointAt(camera.position, camera.forward, camera.up, camera.right);
     Matrix4x4 matCameraInv = Matrix4x4::QuickInverse(matCamera);
@@ -137,8 +138,8 @@ void Scene::Render(float delta) const
         return zA > zB;
     });
 
-    auto fWidth = (float) MainManager::width;
-    auto fHeight = (float) MainManager::height;
+    auto fWidth = (float) Application::width;
+    auto fHeight = (float) Application::height;
     for (const auto &tgl: trianglesToRaster)
     {
         // Project the triangle and render it
@@ -177,21 +178,24 @@ void Scene::MoveCamera(float delta)
     static int len;
     static const Uint8 *keys = SDL_GetKeyboardState(&len);
 
-    const float posSpeed = 3.0f;
+    const float PosSpeed = 8.0f;
+    float posSpeed = PosSpeed * delta;
     const float yOrientationSpeed = 1.8f;
     const float xOrientationSpeed = 1.8f;
+    if (keys[SDL_SCANCODE_SPACE])
+        posSpeed *= 2.0f;
     if (keys[SDL_SCANCODE_W])
-        camera.position += camera.forward * posSpeed * delta;
+        camera.position += camera.forward * posSpeed;
     if (keys[SDL_SCANCODE_S])
-        camera.position -= camera.forward * posSpeed * delta;
+        camera.position -= camera.forward * posSpeed;
     if (keys[SDL_SCANCODE_A])
-        camera.position -= camera.right * posSpeed * delta;
+        camera.position -= camera.right * posSpeed;
     if (keys[SDL_SCANCODE_D])
-        camera.position += camera.right * posSpeed * delta;
+        camera.position += camera.right * posSpeed;
     if (keys[SDL_SCANCODE_E])
-        camera.position.y += posSpeed * delta;
+        camera.position.y += posSpeed;
     if (keys[SDL_SCANCODE_R]) // R or pressing the command key
-        camera.position.y -= posSpeed * delta;
+        camera.position.y -= posSpeed;
     if (keys[SDL_SCANCODE_UP])
         camera.pitch += xOrientationSpeed * delta;
     if (keys[SDL_SCANCODE_DOWN])

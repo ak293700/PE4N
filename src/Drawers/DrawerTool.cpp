@@ -1,5 +1,5 @@
 #include "DrawerTool.h"
-#include "../MainManager/MainManager.h"
+#include "../Application/Application.h"
 #include "Colors.h"
 
 void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color &color)
@@ -27,7 +27,7 @@ void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color
     int bottomYInt = (int) std::ceil(bottom.y);
     int middleYInt = (int) std::floor(middle.y);
 
-    if (!std::isinf(slope2))
+    if (middle.y - bottom.y != 0)
     {
         // Draw the bottom and middle edges of the triangle
         for (int i = bottomYInt; i <= middleYInt; i++)
@@ -35,25 +35,25 @@ void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color
             float x1 = bottom.x + ((float) i - bottom.y) * slope1;
             float x2 = bottom.x + ((float) i - bottom.y) * slope2;
 
-            SDL_RenderDrawLine(MainManager::renderer,
-                               (int) std::ceil(x1), MainManager::height - i,
-                               (int) std::floor(x2), MainManager::height - i);
+            SDL_RenderDrawLine(Application::renderer,
+                               (int) std::ceil(x1), Application::height - i,
+                               (int) std::floor(x2), Application::height - i);
         }
     }
 
     // Determine the y-coordinate range for the top edge of the triangle
     int topYInt = (int) std::floor(top.y);
 
-    if (!std::isinf(slope3))
+    if (top.y - middle.y != 0)
     {
         // Draw the top edge of the triangle
         for (int i = middleYInt + 1; i <= topYInt; i++)
         {
             float x1 = bottom.x + ((float) i - bottom.y) * slope1;
             float x2 = middle.x + ((float) i - middle.y) * slope3;
-            SDL_RenderDrawLine(MainManager::renderer,
-                               (int) std::ceil(x1), MainManager::height - i,
-                               (int) std::floor(x2), MainManager::height - i);
+            SDL_RenderDrawLine(Application::renderer,
+                               (int) std::ceil(x1), Application::height - i,
+                               (int) std::floor(x2), Application::height - i);
         }
     }
 
@@ -63,15 +63,15 @@ void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color
 void Draw2dTriangleOutline(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color &color)
 {
     SetColor(color);
-    int height = MainManager::height;
-    SDL_RenderDrawLine(MainManager::renderer, (int) a.x, height - (int) a.y, (int) b.x, height - (int) b.y);
-    SDL_RenderDrawLine(MainManager::renderer, (int) b.x, height - (int) b.y, (int) c.x, height - (int) c.y);
-    SDL_RenderDrawLine(MainManager::renderer, (int) c.x, height - (int) c.y, (int) a.x, height - (int) a.y);
+    int height = Application::height;
+    SDL_RenderDrawLine(Application::renderer, (int) a.x, height - (int) a.y, (int) b.x, height - (int) b.y);
+    SDL_RenderDrawLine(Application::renderer, (int) b.x, height - (int) b.y, (int) c.x, height - (int) c.y);
+    SDL_RenderDrawLine(Application::renderer, (int) c.x, height - (int) c.y, (int) a.x, height - (int) a.y);
 }
 
 inline void SetColor(const SDL_Color &color)
 {
-    SDL_SetRenderDrawColor(MainManager::renderer, color.r, color.g, color.b, color.a);
+    SDL_SetRenderDrawColor(Application::renderer, color.r, color.g, color.b, color.a);
 }
 
 void DrawLine(const Vec2 &a, const Vec2 &b, const SDL_Color &color)
@@ -82,7 +82,7 @@ void DrawLine(const Vec2 &a, const Vec2 &b, const SDL_Color &color)
 
 inline void DrawLineImpl(const Vec2 &a, const Vec2 &b)
 {
-    SDL_RenderDrawLine(MainManager::renderer, (int) a.x, (int) a.y, (int) b.x, (int) b.y);
+    SDL_RenderDrawLine(Application::renderer, (int) a.x, (int) a.y, (int) b.x, (int) b.y);
 }
 
 void DrawFilledCircle(const Vec2& center, float radius, const SDL_Color& color)
@@ -103,7 +103,7 @@ void DrawFilledCircle(const Vec2& center, float radius, const SDL_Color& color)
             int dx = i - x;
             int dy = j - y;
             if (dx * dx + dy * dy <= r * r)
-                SDL_RenderDrawPoint(MainManager::renderer, i, j);
+                SDL_RenderDrawPoint(Application::renderer, i, j);
         }
     }
 }

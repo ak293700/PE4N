@@ -24,9 +24,7 @@ public:
     float yaw = 0.0f;
     float pitch = 0.0f;
 
-
-    Camera() : Camera(0.1f, 1000.0f, 90.0f, {0.0f, 0.0f, 0.0f}) {};
-
+    Camera() = default;
     Camera(float fNear, float fFar, float fov, Vec3 position)
         : fNear(fNear), fFar(fFar), fov(fov), position(position)
     {

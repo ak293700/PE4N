@@ -1,5 +1,5 @@
 #include "UiDrawer.h"
-#include "../../MainManager/MainManager.h"
+#include "../../Application/Application.h"
 #include "../Colors.h"
 
 void displayFPS(int refresh_time)
@@ -27,12 +27,12 @@ void displayFPS(int refresh_time)
     if (fps_length < 0 || fps_length >= 10)
         fps_string[string_size - 1] = 0; // we add the end of string 0 and continue the function
 
-    SDL_Surface *fps_surface = TTF_RenderText_Solid(MainManager::font,fps_string,Colors::White);
+    SDL_Surface *fps_surface = TTF_RenderText_Solid(Application::font, fps_string, Colors::White);
 
-    SDL_Texture *fps_texture = SDL_CreateTextureFromSurface(MainManager::renderer, fps_surface);
+    SDL_Texture *fps_texture = SDL_CreateTextureFromSurface(Application::renderer, fps_surface);
     SDL_Rect fps_rect = {5, 5, fps_surface->w, fps_surface->h};
 
-    SDL_RenderCopy(MainManager::renderer, fps_texture, nullptr, &fps_rect);
+    SDL_RenderCopy(Application::renderer, fps_texture, nullptr, &fps_rect);
 
     SDL_DestroyTexture(fps_texture);
     SDL_FreeSurface(fps_surface);
@@ -59,12 +59,12 @@ void displayOrientation(float rd_orientation)
     if (orientation_length < 0 || orientation_length >= 10)
         orientation_string[string_size - 1] = 0; // we add the end of string 0 and continue the function
 
-    SDL_Surface *orientation_surface = TTF_RenderText_Solid(MainManager::font, orientation_string, Colors::White);
+    SDL_Surface *orientation_surface = TTF_RenderText_Solid(Application::font, orientation_string, Colors::White);
 
-    SDL_Texture *orientation_texture = SDL_CreateTextureFromSurface(MainManager::renderer, orientation_surface);
-    SDL_Rect orientation_rect = {MainManager::width / 2, 25, orientation_surface->w, orientation_surface->h};
+    SDL_Texture *orientation_texture = SDL_CreateTextureFromSurface(Application::renderer, orientation_surface);
+    SDL_Rect orientation_rect = {Application::width / 2, 25, orientation_surface->w, orientation_surface->h};
 
-    SDL_RenderCopy(MainManager::renderer, orientation_texture, nullptr, &orientation_rect);
+    SDL_RenderCopy(Application::renderer, orientation_texture, nullptr, &orientation_rect);
 
     SDL_DestroyTexture(orientation_texture);
     SDL_FreeSurface(orientation_surface);

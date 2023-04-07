@@ -14,10 +14,9 @@ public:
     Matrix4x4 matrix;
     Light *light;
 
-
-    Scene() {}
-    Scene(Camera camera) : camera(camera) {
-        Init();
+    Scene() = default;
+    explicit Scene(Camera camera) : camera(camera), matrix({}), light(nullptr) {
+//        Init();
     }
 
     void Init();

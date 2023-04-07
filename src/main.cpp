@@ -1,38 +1,14 @@
-#include "MainManager/MainManager.h"
+#include "Application/Application.h"
 #include "Drawers/Colors.h"
 
 int main() {
-    MainManager::Init(800, 800);
 
-    // Define the 12 triangles of the cube
-    Mesh cube = {
-            {
-                    // South
-                    {{0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}},
-                    {{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-
-                    // East
-                    {{1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}},
-                    {{1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 1.0f}},
-
-                    // North
-                    {{1.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 1.0f}},
-                    {{1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-
-                    // West
-                    {{0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-                    {{0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
-
-                    // Top
-                    {{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}},
-                    {{0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 0.0f}},
-
-                    // Bottom
-                    {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}},
-                    {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}}
-            }
-    };
-//    MainManager::scene.meshes.push_back(cube);
+    Application::Init(800, 800);
+    Scene scene;
+//    scene.camera = Camera(0.1f, 1000.0f, 90.0f, {0.0f, 0.0f, 0.0f});
+    scene = Scene(Camera(0.1f, 1000.0f, 90.0f, {0.0f, 0.0f, 0.0f}));
+    Application::scene = &scene;
+    scene.Init();
 
     Mesh triangle = {
             {
@@ -43,12 +19,11 @@ int main() {
             }
 
     };
-//    MainManager::scene.meshes.push_back(triangle);
+//    Application::scene->meshes.push_back(triangle);
 
-    MainManager::Main();
+    Application::Main();
 
-
-    MainManager::Quit();
+    Application::Quit();
 
     return 0;
 }

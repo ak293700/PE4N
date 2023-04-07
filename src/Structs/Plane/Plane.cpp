@@ -63,6 +63,7 @@ int Plane::TriangleClipAgainstPlane(const Triangle &in, Triangle &out1, Triangle
         out1.texture = in.texture;
 //        out1.texture.color.r = 0;
 //        out1.texture.color.b = 0;
+
         return 1;
     }
 

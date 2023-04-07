@@ -1,22 +1,23 @@
-#include "MainManager.h"
+#include "Application.h"
 #include "../Drawers/FramerateDrawer/UiDrawer.h"
 #include "../Drawers/Colors.h"
 #include "../Structs/Vec2/Vec2.h"
-#include "../Drawers/DrawerTool.h"
 
-SDL_Window *MainManager::window = nullptr;
-SDL_Renderer *MainManager::renderer = nullptr;
-std::string MainManager::font_path = "/Library/Fonts/Arial Unicode.ttf";
-TTF_Font *MainManager::font = nullptr;
-float MainManager::aspectRatio = 0.0f;
-int MainManager::width = 0;
-int MainManager::height = 0;
-Scene MainManager::scene = Scene();
 
-void MainManager::Init(int _width, int _height)
+SDL_Window *Application::window;
+SDL_Renderer *Application::renderer;
+std::string Application::font_path;
+TTF_Font *Application::font;
+float Application::aspectRatio;
+int Application::width;
+int Application::height;
+Scene *Application::scene;
+
+void Application::Init(int _width, int _height)
 {
     width = _width;
     height = _height;
+    aspectRatio = (float) height / (float) width;
 
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -25,6 +26,7 @@ void MainManager::Init(int _width, int _height)
     if (TTF_Init() != 0)
         throw std::runtime_error(TTF_GetError());
 
+    font_path = "/Library/Fonts/Arial Unicode.ttf";
     font = TTF_OpenFont(font_path.c_str(), 14);
     if (font == nullptr)
         throw std::runtime_error(TTF_GetError());
@@ -34,15 +36,15 @@ void MainManager::Init(int _width, int _height)
                               width, height,
                               SDL_WINDOW_SHOWN);
 
-    aspectRatio = (float) height / (float) width;
+//    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    // TODO: Create a thread for the rendering and do the computation in another thread
 
-    scene.Init();
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 
-void MainManager::Quit()
+void Application::Quit()
 {
-    scene.Quit();
+    scene->Quit();
     TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -51,14 +53,14 @@ void MainManager::Quit()
     SDL_Quit();
 }
 
-inline void MainManager::Clear()
+inline void Application::Clear()
 {
-//     Clear the screen
+    // Clear the screen
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 }
 
-void MainManager::Main()
+void Application::Main()
 {
     Uint64 last_frame_time = SDL_GetTicks64();
     Uint64 current_time;
@@ -82,18 +84,18 @@ void MainManager::Main()
     }
 }
 
-void MainManager::Run(float delta)
+void Application::Run(float delta)
 {
     Clear();
     int x, y;
     SDL_GetMouseState(&x, &y);
 
-    scene.MoveCamera(delta);
-    scene.camera.RecomputeForwardUpAndRight();
-    scene.Render(delta);
+    scene->MoveCamera(delta);
+    scene->camera.RecomputeForwardUpAndRight();
+    scene->Render(delta);
     displayFPS();
-    displayOrientation(scene.camera.yaw);
+    displayOrientation(scene->camera.yaw);
 
-    SDL_RenderPresent(MainManager::renderer);
+    SDL_RenderPresent(Application::renderer);
 }
 

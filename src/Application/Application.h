@@ -6,12 +6,10 @@
 #include "../Scene/Scene.h"
 
 
-class MainManager
-{
+class Application {
 private:
     // so it cannot be instantiated
-    MainManager()
-    {}
+    Application() = delete;
 
 public:
     static void Init(int width, int height);
@@ -29,7 +27,7 @@ public:
     static SDL_Renderer *renderer;
     static std::string font_path;
     static TTF_Font *font;
-    static Scene scene;
+    static Scene* scene;
     static float aspectRatio; // aspect ratio of the screen
 private:
     static void Run(float delta);
