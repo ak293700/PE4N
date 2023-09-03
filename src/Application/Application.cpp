@@ -38,8 +38,8 @@ void Application::Init(int _width, int _height)
 
 //    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    // TODO: Create a thread for the rendering and do the computation in another thread
 
+    // TODO: Create a thread for the rendering and do the computation in another thread
 }
 
 void Application::Quit()

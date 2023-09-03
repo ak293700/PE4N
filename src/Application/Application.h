@@ -6,12 +6,11 @@
 #include "../Scene/Scene.h"
 
 
-class Application {
-private:
+class Application {private:
+public:
     // so it cannot be instantiated
     Application() = delete;
 
-public:
     static void Init(int width, int height);
 
     static void Main();

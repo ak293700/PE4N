@@ -18,16 +18,18 @@ void Scene::Init()
 
     meshes.reserve(100); // we allocate the
     meshes.push_back(Mesh::Load("../assets/teapot.obj", 1.0f, {0.0f, -3.0f, 0.0f}));
-//    meshes.push_back(Mesh::Load("../asse/ts/rammer.obj", 0.1f, {0.0f, -3.0f, 3.0f}));
+
+    lights.reserve(10);
+//    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, 3.0f}));
 //    meshes.push_back(Mesh::Load("../assets/rammer.obj", 0.1f, {0.0f, -3.0f, -3.0f}));
 //    meshes.push_back(Mesh::Load("../assets/house.obj", 0.1f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 0.0f}));
+//    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {5.0f, -3.0f, 5.0f}));
+//    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 10.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 5.0f}));
 //    meshes.push_back(Mesh::Load("../assets/mountain.obj", 1.0f, {0.0f, -15.0f, 5.0f}));
 //    meshes.push_back(Mesh::Load("../assets/cube.obj", 1.0f, {0.0f, 0.0f, 3.0f}));
-
-    light = new DirectionalLight({1.0f, 0.0f, 1.0f}, {255, 255, 255, 255});
 }
 
 void Scene::Quit()
@@ -124,8 +126,11 @@ void Scene::Render(float delta) const
             };
 
             // compute the color using the triangle of the regular space
-            tglViewed.texture.color = light->GetColor(tgl);
+            SDL_Color color = {0, 0, 0, 255};
+            for (auto light : lights)
+                color = Light::addColors(color, light->GetColor(tgl));
 
+            tglViewed.texture.color = color;
             ClipTriangle(trianglesToRaster, tglViewed);
         }
     }

@@ -4,6 +4,7 @@
 #include "../Structs/Camera/Camera.h"
 #include "../Structs/Matrix/Matrix4x4.h"
 #include "../Lights/DirectionalLight.h"
+#include "../Lights/Light.h"
 #include "../Structs/Plane/Plane.h"
 #include <SDL.h>
 
@@ -12,12 +13,11 @@ public:
     std::vector<Mesh> meshes;
     Camera camera;
     Matrix4x4 matrix;
-    Light *light;
+    std::vector<Light*> lights;
 
-    Scene() = default;
-    explicit Scene(Camera camera) : camera(camera), matrix({}), light(nullptr) {
-//        Init();
-    }
+
+//    Scene() = default;
+    explicit Scene(Camera camera) : camera(camera), matrix({}) {}
 
     void Init();
     void Quit();

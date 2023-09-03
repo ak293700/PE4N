@@ -44,7 +44,7 @@ void displayFPS(int refresh_time)
     }
 }
 
-float modulo(float a, float b)
+double modulo(double a, double b)
 {
     return a - b * floor(a / b);
 }
@@ -53,7 +53,7 @@ void displayOrientation(float rd_orientation)
 {
     const int string_size = 10;
     static char orientation_string[string_size];
-    float orientationInDegrees = modulo(rd_orientation * 180.0f / M_PI, 360.0f);
+    double orientationInDegrees = modulo(rd_orientation * 180.0f / M_PI, 360.0f);
 
     int orientation_length = snprintf(orientation_string, 10, "%.2f", orientationInDegrees);
     if (orientation_length < 0 || orientation_length >= 10)
