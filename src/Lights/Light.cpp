@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Light.h"
 
 Light::Light(SDL_Color _color)
@@ -12,13 +13,21 @@ void Light::SetColor(SDL_Color _color) {
 }
 
 SDL_Color Light::addColors(SDL_Color color1, SDL_Color color2) {
-    int red = color1.r + color2.r;
-    int green = color1.g + color2.g;
-    int blue = color1.b + color2.b;
+    float alfa1 = (float)color1.a / 255.0f;
+    float alfa2 = (float)color2.a / 255.0f;
 
-    return {(Uint8) (red < 255 ? red : 255),
-            (Uint8) (green < 255 ? green : 255),
-            (Uint8) (blue < 255 ? blue : 255),
+//    std::cout << (int)color1.a << ' ' << (int)color2.a << std::endl;
+//    std::cout << alfa1 << ' ' << alfa2 << std::endl;
+
+    float red = (float)color1.r * alfa1 + (float)color2.r * alfa2;
+    float green = (float)color1.g * alfa1 + (float)color2.g * alfa2;
+    float blue = (float)color1.b * alfa1 + (float)color2.b * alfa2;
+
+
+
+    return {(Uint8) (red < 255.0f ? red : 255.0f),
+            (Uint8) (green < 255.0f ? green : 255.0f),
+            (Uint8) (blue < 255.0f ? blue : 255.0f),
             255};
 }
 

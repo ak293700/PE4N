@@ -10,8 +10,8 @@ int main() {
     Application::scene = &scene;
     scene.Init();
 
-    scene.lights.push_back(new DirectionalLight({1.0f, 0.0f, 1.0f}, {255, 0, 0, 255}));
-    scene.lights.push_back(new DirectionalLight({1.0f, 1.0f, 0.0f}, {0, 0, 255, 255}));
+    scene.lights.push_back(new DirectionalLight({1.0f, -1.0f, 1.0f}, {19, 139, 255, 125}));
+    scene.lights.push_back(new DirectionalLight({1.0f, -0.2f, 0.0f}, {255, 97, 53, 255}));
 
     Mesh triangle = {
             {

@@ -26,7 +26,7 @@ SDL_Color DirectionalLight::GetColor(const Triangle &tgl) const
     return {(Uint8) (grayscale * rgbStrength.x),
             (Uint8) (grayscale * rgbStrength.y),
             (Uint8) (grayscale * rgbStrength.z),
-            255};
+            color.a};
 }
 
 void DirectionalLight::SetDir(const Vec3 &_dir)
