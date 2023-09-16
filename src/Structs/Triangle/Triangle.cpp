@@ -1,10 +1,10 @@
 #include "Triangle.h"
 #include <iostream>
 
-Vec3 Triangle::norm() const
+Vec3d Triangle::norm() const
 {
-    Vec3 line1 = a.diff(b);
-    Vec3 line2 = a.diff(c);
+    Vec3d line1 = a.diff(b);
+    Vec3d line2 = a.diff(c);
 
     return line1.cross(line2);
 }

@@ -4,12 +4,12 @@
 #include <sstream>
 
 // Does not handle everything
-Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
+Mesh Mesh::Load(const std::string& path, float scale, Vec3d offset)
 {
     Mesh result;
 
     std::ifstream file(path);
-    std::vector<Vec3> vertices = std::vector<Vec3>();
+    std::vector<Vec3d> vertices = std::vector<Vec3d>();
 
     if (!file.is_open())
         throw std::runtime_error("File is not open");
@@ -23,8 +23,9 @@ Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
         if (type != "v")
             continue;
 
-        Vec3 v = Vec3();
+        Vec3d v = Vec3d();
         ss >> v.x >> v.y >> v.z;
+        v.w = 1.0f;
         vertices.push_back(v * scale + offset);
     }
 
@@ -43,7 +44,7 @@ Mesh Mesh::Load(const std::string& path, float scale, Vec3 offset)
 
         fCount++;
 
-        std::vector<Vec3> polygon_vertices;
+        std::vector<Vec3d> polygon_vertices;
         std::string vertex_string;
         while (ss >> vertex_string)
         {

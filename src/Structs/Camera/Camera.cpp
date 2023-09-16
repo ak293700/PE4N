@@ -5,11 +5,11 @@ void Camera::RecomputeForwardUpAndRight() {
 //    forward = forward.normalize();
 
     Matrix4x4 matRot = Matrix4x4::RotationX(pitch) * Matrix4x4::RotationY(yaw);
-    forward = (matRot * (Vec3) {0.0f, 0.0f, 1.0f}).normalize();
-//    forward = (matRot * (Vec3){0.0f, 0.0f, 1.0f});
+    forward = (matRot * (Vec3d) {0.0f, 0.0f, 1.0f}).normalize();
+//    forward = (matRot * (Vec3d){0.0f, 0.0f, 1.0f});
 
-    const Vec3 baseUp = {0.0f, 1.0f, 0.0f};
-    Vec3 a = forward * baseUp.dot(forward);
+    const Vec3d baseUp = {0.0f, 1.0f, 0.0f};
+    Vec3d a = forward * baseUp.dot(forward);
     up = (baseUp - a).normalize();
     right = up.cross(forward);
 }

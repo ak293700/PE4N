@@ -2,7 +2,7 @@
 #include "../../Drawers/Colors.h"
 #include <iostream>
 
-Vec3 Plane::GetIntersectionPoint(const Vec3 &a, const Vec3 &b) const {
+Vec3d Plane::GetIntersectionPoint(const Vec3d &a, const Vec3d &b) const {
     float planeDot = normal.dot(p);
     float aDot = a.dot(normal);
     float bDot = b.dot(normal);
@@ -15,12 +15,12 @@ Vec3 Plane::GetIntersectionPoint(const Vec3 &a, const Vec3 &b) const {
 //// does not guarantee the vertex order to be clockwise
 int Plane::TriangleClipAgainstPlane(const Triangle &in, Triangle &out1, Triangle &out2) const {
     // the signed distance from the point to the plane
-    auto dist = [&](const Vec3 &v) -> float {
+    auto dist = [&](const Vec3d &v) -> float {
         return (normal.x * v.x + normal.y * v.y + normal.z * v.z - normal.dot(p));
     };
 
-    const Vec3 *insidePoints[3]; // the points that are inside the plane
-    const Vec3 *outsidePoints[3]; // the points that are outside the plane
+    const Vec3d *insidePoints[3]; // the points that are inside the plane
+    const Vec3d *outsidePoints[3]; // the points that are outside the plane
     int insideCount = 0; // the number of points that are inside the plane
     int outsideCount = 0; // the number of points that are outside the plane
 

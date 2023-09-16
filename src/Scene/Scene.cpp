@@ -3,7 +3,6 @@
 #include "../Structs/Vec2/Vec2.h"
 #include "../Drawers/Colors.h"
 #include "../Drawers/DrawerTool.h"
-#include "../Structs/Plane/Plane.h"
 #include <algorithm>
 
 
@@ -28,8 +27,9 @@ void Scene::Init()
 //    meshes.push_back(Mesh::Load("../assets/building-001.obj", 0.3f, {0.0f, -3.0f, 10.0f}));
 //    meshes.push_back(Mesh::Load("../assets/plane.obj", 0.01f, {0.0f, -3.0f, 0.0f}));
 //    meshes.push_back(Mesh::Load("../assets/axis.obj", 1.0f, {0.0f, -3.0f, 5.0f}));
-    meshes.push_back(Mesh::Load("../assets/mountain.obj", 1.0f, {0.0f, -15.0f, 5.0f}));
+//    meshes.push_back(Mesh::Load("../assets/mountain.obj", 1.0f, {0.0f, -15.0f, 5.0f}));
 //    meshes.push_back(Mesh::Load("../assets/cube.obj", 1.0f, {0.0f, 0.0f, 3.0f}));
+    meshes.push_back(Mesh::Load("../assets/blender.obj", 2.0f, {0.0f, 0.0f, 3.0f}));
 }
 
 void Scene::Quit()
@@ -150,10 +150,14 @@ void Scene::Render(float delta) const
     for (const auto &tgl: trianglesToRaster)
     {
         // Project the triangle and render it
-        Triangle pjt; // projected triangle
+        Triangle pjt{}; // projected triangle
         pjt.a = tgl.a * matrix;
         pjt.b = tgl.b * matrix;
         pjt.c = tgl.c * matrix;
+
+        pjt.a = pjt.a / pjt.a.w;
+        pjt.b = pjt.b / pjt.b.w;
+        pjt.c = pjt.c / pjt.c.w;
 
         pjt.a.x += 1.0f;
         pjt.a.y += 1.0f;
@@ -172,7 +176,6 @@ void Scene::Render(float delta) const
 
         pjt.c.x *= 0.5f * fWidth;
         pjt.c.y *= 0.5f * fHeight;
-
         Draw2dTriangle((Vec2) {pjt.a.x, pjt.a.y},
                        (Vec2) {pjt.b.x, pjt.b.y},
                        (Vec2) {pjt.c.x, pjt.c.y},

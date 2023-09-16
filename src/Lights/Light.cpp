@@ -16,9 +16,6 @@ SDL_Color Light::addColors(SDL_Color color1, SDL_Color color2) {
     float alfa1 = (float)color1.a / 255.0f;
     float alfa2 = (float)color2.a / 255.0f;
 
-//    std::cout << (int)color1.a << ' ' << (int)color2.a << std::endl;
-//    std::cout << alfa1 << ' ' << alfa2 << std::endl;
-
     float red = (float)color1.r * alfa1 + (float)color2.r * alfa2;
     float green = (float)color1.g * alfa1 + (float)color2.g * alfa2;
     float blue = (float)color1.b * alfa1 + (float)color2.b * alfa2;

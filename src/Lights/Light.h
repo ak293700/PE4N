@@ -17,5 +17,5 @@ public:
 
 protected:
     SDL_Color color;
-    Vec3 rgbStrength;
+    Vec3d rgbStrength;
 };
