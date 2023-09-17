@@ -2,7 +2,7 @@
 #include "../Application/Application.h"
 #include "Colors.h"
 
-void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color &color)
+void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color &color, float* depthBuffer)
 {
     SetColor(color);
 
@@ -34,6 +34,19 @@ void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color
         {
             float x1 = bottom.x + ((float) i - bottom.y) * slope1;
             float x2 = bottom.x + ((float) i - bottom.y) * slope2;
+//            float w1 =
+
+//            for (int j = (int) std::ceil(x1); j <= (int) std::floor(x2); j++)
+//            {
+//                if (j < 0 || j >= Application::width)
+//                    continue;
+//                if (i < 0 || i >= Application::height)
+//                    continue;
+//                if (depthBuffer[i * Application::width + j] < bottom.z)
+//                    continue;
+//                SDL_RenderDrawPoint(Application::renderer, j, Application::height - i);
+//                depthBuffer[i * Application::width + j] = bottom.z;
+//            }
 
             SDL_RenderDrawLine(Application::renderer,
                                (int) std::ceil(x1), Application::height - i,
@@ -51,9 +64,11 @@ void Draw2dTriangle(const Vec2 &a, const Vec2 &b, const Vec2 &c, const SDL_Color
         {
             float x1 = bottom.x + ((float) i - bottom.y) * slope1;
             float x2 = middle.x + ((float) i - middle.y) * slope3;
+
             SDL_RenderDrawLine(Application::renderer,
                                (int) std::ceil(x1), Application::height - i,
                                (int) std::floor(x2), Application::height - i);
+
         }
     }
 

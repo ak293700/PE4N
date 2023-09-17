@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL.h>
-#include "../Structs/Vec3/Vec3d.h"
+#include "../Structs/Vec3d/Vec3d.h"
 #include "../Structs/Triangle/Triangle.h"
 #include "Light.h"
 

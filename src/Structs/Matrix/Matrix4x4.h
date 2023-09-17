@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Vec3/Vec3d.h"
+#include "../Vec3d/Vec3d.h"
 struct Vec3d;
 
 struct Matrix4x4

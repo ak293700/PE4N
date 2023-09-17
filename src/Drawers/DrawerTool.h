@@ -4,7 +4,7 @@
 #include "../Structs/Vec2/Vec2.h"
 #include "../Structs/Triangle/Triangle.h"
 
-void Draw2dTriangle(const Vec2& a, const Vec2& b, const Vec2& c, const SDL_Color& color);
+void Draw2dTriangle(const Vec2& a, const Vec2& b, const Vec2& c, const SDL_Color& color, float* depthBuffer);
 
 void Draw2dTriangleOutline(const Vec2& a, const Vec2& b, const Vec2& c, const SDL_Color& color);
 

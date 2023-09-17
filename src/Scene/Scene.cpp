@@ -109,6 +109,7 @@ void Scene::Render(float delta) const
     Matrix4x4 matCameraInv = Matrix4x4::QuickInverse(matCamera);
 
     std::vector<Triangle> trianglesToRaster;
+    float* depthBuffer = new float[Application::width * Application::height];
 
     for (const auto &mesh: meshes)
     {
@@ -179,7 +180,8 @@ void Scene::Render(float delta) const
         Draw2dTriangle((Vec2) {pjt.a.x, pjt.a.y},
                        (Vec2) {pjt.b.x, pjt.b.y},
                        (Vec2) {pjt.c.x, pjt.c.y},
-                       tgl.texture.color);
+                       tgl.texture.color,
+                       depthBuffer);
     }
 }
 

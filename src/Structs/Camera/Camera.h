@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include "../Vec3/Vec3d.h"
+#include "../Vec3d/Vec3d.h"
 #include "../Matrix/Matrix4x4.h"
 
 struct Camera
